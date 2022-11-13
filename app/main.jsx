@@ -7,8 +7,6 @@ import {
 } from '@progress/kendo-react-grid';
 import { sampleProducts } from './sample-products';
 import ActionCommandCell from './cells/ActionCommandCell';
-import DateCell from './cells/DateCell';
-import DropDownCell from './cells/DropDownCell';
 import CellRender from './renderers/CellRenderer';
 import columns from './columns';
 import RowRender from './renderers/RowRenderer';
@@ -159,30 +157,34 @@ const App = () => {
       if (isLastLine) {
         exitEdit();
       } else {
-        // remove
-        const nextEditableColumn = columns.find(
-          (column) => column.editable !== false
-        );
-        const newData = data.map((item, index) => {
-          if (index === editedLineIndex) {
-            item[editField] = undefined;
-          }
-          if (index === nextLineIndex) {
-            item[editField] = nextEditableColumn?.field;
+        //
+        setTimeout(() => {
+          const nextEditableColumn = columns.find(
+            (column) => column.editable !== false
+          );
+          const newData = data.map((item, index) => {
+            if (index === editedLineIndex) {
+              item[editField] = undefined;
+            }
+            if (index === nextLineIndex) {
+              item[editField] = nextEditableColumn?.field;
+            }
+            return item;
+          });
+          setData(newData);
+        });
+      }
+    } else {
+      setTimeout(() => {
+        // dataItem[editField] = columns[nextColumnIndex].field;
+        const newData = data.map((item) => {
+          if (isItemEqualToDataItem(item, dataItem)) {
+            item[editField] = columns[nextColumnIndex].field;
           }
           return item;
         });
         setData(newData);
-      }
-    } else {
-      // dataItem[editField] = columns[nextColumnIndex].field;
-      const newData = data.map((item) => {
-        if (isItemEqualToDataItem(item, dataItem)) {
-          item[editField] = columns[nextColumnIndex].field;
-        }
-        return item;
       });
-      setData(newData);
     }
   };
 
