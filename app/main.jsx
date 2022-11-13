@@ -8,7 +8,13 @@ import {
 import { sampleProducts } from './sample-products';
 import { MyCommandCell } from './myCommandCell';
 import { DropDownCell } from './myDropDownCell';
-import { insertItem, getItems, updateItem, deleteItem } from './services';
+import {
+  deleteItem,
+  generateId,
+  getItems,
+  insertItem,
+  updateItem,
+} from './services';
 
 const App = () => {
   const editField = 'inEdit';
@@ -52,19 +58,27 @@ const App = () => {
     setData(newData);
   };
 
+  const isEqual = (a, b, key = 'ProductID') => a[key] === b[key];
+  const isItemEqualToDataItem = (dataItem, item) => {
+    if (!item) {
+      return (checkedItem) => isEqual(dataItem, checkedItem);
+    }
+    return isEqual(dataItem, item);
+  };
+
   const cancel = (dataItem) => {
-    const originalItem = getItems().find(
-      (p) => p.ProductID === dataItem.ProductID
+    const originalItem = getItems().find((item) =>
+      isItemEqualToDataItem(dataItem, item)
     );
     const newData = data.map((item) =>
-      item.ProductID === originalItem.ProductID ? originalItem : item
+      item?.ProductID === originalItem?.ProductID ? originalItem : item
     );
     setData(newData);
   };
 
   const enterEdit = (dataItem) => {
     let newData = data.map((item) =>
-      item.ProductID === dataItem.ProductID
+      isItemEqualToDataItem(dataItem, item)
         ? {
             ...item,
             inEdit: true,
@@ -77,7 +91,7 @@ const App = () => {
   const itemChange = (event) => {
     const field = event.field || '';
     const newData = data.map((item) =>
-      item.ProductID === event.dataItem.ProductID
+      isItemEqualToDataItem(event.dataItem, item)
         ? {
             ...item,
             [field]: event.value,
@@ -91,7 +105,7 @@ const App = () => {
     const newDataItem = {
       inEdit: true,
       Discontinued: false,
-      ProductID: new Date().getMilliseconds(),
+      ProductID: undefined,
     };
     setData([newDataItem, ...data]);
   };
