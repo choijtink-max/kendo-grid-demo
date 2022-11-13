@@ -6,22 +6,16 @@ import {
   GridToolbar,
 } from '@progress/kendo-react-grid';
 import { sampleProducts } from './sample-products';
-import { MyCommandCell } from './myCommandCell';
-import { DropDownCell } from './myDropDownCell';
-import {
-  deleteItem,
-  generateId,
-  getItems,
-  insertItem,
-  updateItem,
-} from './services';
+import ActionCommandCell from './CommandCell';
+import DropDownCell from './DropDownCell';
+import { deleteItem, getItems, insertItem, updateItem } from './services';
 
 const App = () => {
   const editField = 'inEdit';
   const [data, setData] = React.useState(sampleProducts);
 
   const CommandCell = (props) => (
-    <MyCommandCell
+    <ActionCommandCell
       {...props}
       edit={enterEdit}
       remove={remove}

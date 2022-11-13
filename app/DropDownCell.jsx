@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { DropDownList } from '@progress/kendo-react-dropdowns';
-export const DropDownCell = (props) => {
+
+const DropDownCell = (props) => {
   const localizedData = [
     {
       text: 'yes',
@@ -43,3 +44,5 @@ export const DropDownCell = (props) => {
 
   return <td>{dataItem.inEdit ? renderInEdit() : dataValue.toString()}</td>;
 };
+
+export default DropDownCell;
