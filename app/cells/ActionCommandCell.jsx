@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-const CommandCell = (props) => {
+const ActionCommandCell = (props) => {
   const { dataItem } = props;
   const inEdit = dataItem[props.editField];
   const isNewItem = dataItem.ProductID === undefined;
@@ -49,4 +49,4 @@ const CommandCell = (props) => {
   return inEdit ? renderInEdit() : renderDefault();
 };
 
-export default CommandCell;
+export default ActionCommandCell;

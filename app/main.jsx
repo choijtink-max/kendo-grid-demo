@@ -6,8 +6,8 @@ import {
   GridToolbar,
 } from '@progress/kendo-react-grid';
 import { sampleProducts } from './sample-products';
-import ActionCommandCell from './CommandCell';
-import DropDownCell from './DropDownCell';
+import ActionCommandCell from './cells/ActionCommandCell';
+import DropDownCell from './cells/DropDownCell';
 import { deleteItem, getItems, insertItem, updateItem } from './services';
 
 const App = () => {
