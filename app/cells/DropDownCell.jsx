@@ -2,6 +2,7 @@ import * as React from 'react';
 import { DropDownList } from '@progress/kendo-react-dropdowns';
 
 const DropDownCell = (props) => {
+  const { dataItem, field = '', onChange, render } = props;
   const localizedData = [
     {
       text: 'yes',
@@ -18,18 +19,17 @@ const DropDownCell = (props) => {
   ];
 
   const handleChange = (e) => {
-    if (props.onChange) {
-      props.onChange({
+    if (onChange) {
+      onChange({
         dataIndex: 0,
-        dataItem: props.dataItem,
-        field: props.field,
+        dataItem: dataItem,
+        field: field,
         syntheticEvent: e.syntheticEvent,
         value: e.target.value.value,
       });
     }
   };
-  const { dataItem } = props;
-  const field = props.field || '';
+
   const dataValue = dataItem[field] === null ? '' : dataItem[field];
 
   const renderInEdit = () => (
@@ -42,7 +42,11 @@ const DropDownCell = (props) => {
     />
   );
 
-  return <td>{dataItem.inEdit ? renderInEdit() : dataValue.toString()}</td>;
+  const defaultRendering = (
+    <td>{dataItem.inEdit ? renderInEdit() : dataValue.toString()}</td>
+  );
+
+  return render?.call(undefined, defaultRendering, props);
 };
 
 export default DropDownCell;

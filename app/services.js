@@ -1,11 +1,15 @@
 import { sampleProducts } from './sample-products';
+
 let data = [...sampleProducts];
+
+export const editField = 'inEdit';
+
 export const generateId = (data) =>
   data.reduce((acc, current) => Math.max(acc, current.ProductID), 0) + 1;
 
 export const insertItem = (item) => {
   item.ProductID = generateId(data);
-  item.inEdit = false;
+  item[editField] = false;
   data.unshift(item);
   return data;
 };

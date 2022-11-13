@@ -9,17 +9,17 @@ import { sampleProducts } from './sample-products';
 import ActionCommandCell from './cells/ActionCommandCell';
 import DateCell from './cells/DateCell';
 import DropDownCell from './cells/DropDownCell';
-import { deleteItem, getItems, insertItem, updateItem } from './services';
+import { deleteItem, editField, getItems, insertItem, updateItem } from './services';
 import CellRender from './renderers/CellRenderer';
 import RowRender from './renderers/RowRenderer';
 
 const App = () => {
-  const editField = 'inEdit';
   const [data, setData] = React.useState(sampleProducts);
 
   const CommandCell = (props) => (
     <ActionCommandCell
       {...props}
+      render={props.render}
       edit={enterEdit}
       remove={remove}
       add={add}
@@ -37,13 +37,13 @@ const App = () => {
   };
 
   const add = (dataItem) => {
-    dataItem.inEdit = true;
+    dataItem[editField] = true;
     const newData = insertItem(dataItem);
     setData(newData);
   };
 
   const update = (dataItem) => {
-    dataItem.inEdit = false;
+    dataItem[editField] = false;
     const newData = updateItem(dataItem);
     setData(newData);
   };

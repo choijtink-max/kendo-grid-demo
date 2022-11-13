@@ -1,25 +1,22 @@
 import * as React from 'react';
 
 const ActionCommandCell = (props) => {
-  const { dataItem } = props;
-  const inEdit = dataItem[props.editField];
+  const { add, cancel, dataItem, discard, edit, editField, update, render } =
+    props;
+  const inEdit = dataItem[editField];
   const isNewItem = dataItem.ProductID === undefined;
 
   const renderInEdit = () => (
     <td className="k-command-cell">
       <button
         className="k-button k-button-md k-rounded-md k-button-solid k-button-solid-base k-grid-save-command"
-        onClick={() =>
-          isNewItem ? props.add(dataItem) : props.update(dataItem)
-        }
+        onClick={() => (isNewItem ? add(dataItem) : update(dataItem))}
       >
         {isNewItem ? 'Add' : 'Update'}
       </button>
       <button
         className="k-button k-button-md k-rounded-md k-button-solid k-button-solid-base k-grid-cancel-command"
-        onClick={() =>
-          isNewItem ? props.discard(dataItem) : props.cancel(dataItem)
-        }
+        onClick={() => (isNewItem ? discard(dataItem) : cancel(dataItem))}
       >
         {isNewItem ? 'Discard' : 'Cancel'}
       </button>
@@ -30,7 +27,7 @@ const ActionCommandCell = (props) => {
     <td className="k-command-cell">
       <button
         className="k-button k-button-md k-rounded-md k-button-solid k-button-solid-primary k-grid-edit-command"
-        onClick={() => props.edit(dataItem)}
+        onClick={() => edit(dataItem)}
       >
         Edit
       </button>
@@ -38,7 +35,7 @@ const ActionCommandCell = (props) => {
         className="k-button k-button-md k-rounded-md k-button-solid k-button-solid-base k-grid-remove-command"
         onClick={() =>
           confirm('Confirm deleting: ' + dataItem.ProductName) &&
-          props.remove(dataItem)
+          remove(dataItem)
         }
       >
         Remove
@@ -46,7 +43,8 @@ const ActionCommandCell = (props) => {
     </td>
   );
 
-  return inEdit ? renderInEdit() : renderDefault();
+  const defaultRendering = inEdit ? renderInEdit() : renderDefault();
+  return render?.call(undefined, defaultRendering, props);
 };
 
 export default ActionCommandCell;
