@@ -7,8 +7,11 @@ import {
 } from '@progress/kendo-react-grid';
 import { sampleProducts } from './sample-products';
 import ActionCommandCell from './cells/ActionCommandCell';
+import DateCell from './cells/DateCell';
 import DropDownCell from './cells/DropDownCell';
 import { deleteItem, getItems, insertItem, updateItem } from './services';
+import CellRender from './renderers/CellRenderer';
+import RowRender from './renderers/RowRenderer';
 
 const App = () => {
   const editField = 'inEdit';
@@ -71,14 +74,18 @@ const App = () => {
   };
 
   const enterEdit = (dataItem) => {
-    let newData = data.map((item) =>
-      isItemEqualToDataItem(dataItem, item)
-        ? {
-            ...item,
-            inEdit: true,
-          }
-        : item
-    );
+    let newData = data.map((item) => ({
+      ...item,
+      [editField]: isItemEqualToDataItem(dataItem, item),
+    }));
+    setData(newData);
+  };
+
+  const exitEdit = () => {
+    const newData = data.map((item) => ({
+      ...item,
+      [editField]: undefined,
+    }));
     setData(newData);
   };
 
@@ -97,17 +104,38 @@ const App = () => {
 
   const addNew = () => {
     const newDataItem = {
-      inEdit: true,
+      [editField]: true,
       Discontinued: false,
       ProductID: undefined,
+      DeliveredOn: undefined,
     };
     setData([newDataItem, ...data]);
   };
+
+  const customCellRender = (td, props) => (
+    <CellRender
+      originalProps={props}
+      td={td}
+      enterEdit={enterEdit}
+      editField={editField}
+    />
+  );
+
+  const customRowRender = (tr, props) => (
+    <RowRender
+      originalProps={props}
+      tr={tr}
+      exitEdit={exitEdit}
+      editField={editField}
+    />
+  );
 
   return (
     <Grid
       data={data}
       onItemChange={itemChange}
+      cellRender={customCellRender}
+      rowRender={customRowRender}
       editField={editField}
       dataItemKey={'ProductID'}
     >
@@ -128,6 +156,12 @@ const App = () => {
         editor="date"
         format="{0:d}"
       />
+      {/* <Column
+        field="DeliveredOn"
+        title="Delivered On"
+        cell={DateCell}
+        width="140px"
+      /> */}
       <Column field="UnitsInStock" title="Units" editor="numeric" />
       <Column field="Discontinued" title="Discontinued" cell={DropDownCell} />
       <Column cell={CommandCell} width="240px" />
