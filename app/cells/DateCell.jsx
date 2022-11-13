@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { DatePicker } from '@progress/kendo-react-dateinputs';
+import isFunction from 'lodash/isFunction';
 
 const DateCell = (props) => {
   const { ariaColumnIndex, columnIndex, dataItem, field, render } = props;
@@ -29,7 +30,10 @@ const DateCell = (props) => {
     </div>
   );
 
-  const renderValue = () => (value ? value.toLocaleDateString() : '');
+  const renderValue = () =>
+    value && isFunction(value.toLocaleDateString)
+      ? value.toLocaleDateString()
+      : '';
 
   const defaultRendering = (
     <td

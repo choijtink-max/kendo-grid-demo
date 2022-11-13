@@ -11,6 +11,7 @@ import CellRender from './renderers/CellRenderer';
 import { columns, getFirstEditableColumn } from './columns';
 import RowRender from './renderers/RowRenderer';
 import {
+  createNewItem,
   dataItemKey,
   deleteItem,
   editField,
@@ -21,7 +22,7 @@ import {
 
 const App = () => {
   const [data, setData] = useState(sampleProducts);
-  const [dataBeforeSave, setDataBeforeSave] = useState(sampleProducts);
+  const [dataBeforeSave, setDataBeforeSave] = useState();
 
   const CommandCell = (props) => (
     <ActionCommandCell
@@ -120,12 +121,7 @@ const App = () => {
   };
 
   const addNew = () => {
-    const newDataItem = {
-      [editField]: true,
-      Discontinued: false,
-      ProductID: undefined,
-      DeliveredOn: undefined,
-    };
+    const newDataItem = createNewItem();
     setDataBeforeSave({ ...newDataItem });
     setData([newDataItem, ...data]);
   };

@@ -5,12 +5,16 @@ const initialData = [...sampleProducts];
 export const dataItemKey = 'ProductID';
 export const editField = 'inEdit';
 
-export const isEqual = (a, b, key = dataItemKey) => a?.[key] === b?.[key];
-export const isItemEqualToDataItem = (item, dataItem) => {
-  return isEqual(item, dataItem);
+export function isEqual(a, b, key) {
+  return a?.[key] === b?.[key];
+}
+
+export const isItemEqualToDataItem = (item, dataItem, key = dataItemKey) => {
+  return isEqual(item, dataItem, key);
 };
-export const isItemEqualToDataItemCallback = (dataItem) => {
-  return (item) => isEqual(item, dataItem, dataItemKey);
+
+export const isItemEqualToDataItemCallback = (dataItem, key = dataItemKey) => {
+  return (item) => isEqual(item, dataItem, key);
 };
 
 export const generateId = (data) =>
@@ -28,13 +32,25 @@ export const getItems = () => {
 };
 
 export const updateItem = (item, data) => {
-  let index = data.findIndex((record) => record[dataItemKey] === item[dataItemKey]);
+  const index = data.findIndex((dataItem) =>
+    isItemEqualToDataItem(item, dataItem)
+  );
   data[index] = item;
   return data;
 };
 
 export const deleteItem = (item, data) => {
-  let index = data.findIndex((record) => record[dataItemKey] === item[dataItemKey]);
+  const index = data.findIndex((dataItem) =>
+    isItemEqualToDataItem(item, dataItem)
+  );
   data.splice(index, 1);
   return data;
 };
+
+export const createNewItem = () => ({
+  [editField]: true,
+  Discontinued: false,
+  ProductID: undefined,
+  FirstOrderedOn: undefined, // new Date(),
+  DeliveredOn: undefined, // new Date(),
+});
