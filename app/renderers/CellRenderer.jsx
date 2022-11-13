@@ -6,7 +6,7 @@ const ENTER_KEY = 13;
 const ESC_KEY = 27;
 
 const CellRender = (props) => {
-  const { enterEdit, exitEdit, focusNextCell, originalProps, td } = props;
+  const { cancel, enterEdit, focusNextCell, originalProps, td } = props;
   const { dataItem, field } = originalProps;
   const inEditField = dataItem[editField];
   const extraProps =
@@ -44,7 +44,8 @@ const CellRender = (props) => {
         event.preventDefault();
         focusNextCell(event, dataItem, field);
       } else if (keyCode === ESC_KEY) {
-        exitEdit();
+        console.log(`keyCode is ESC`);
+        cancel(dataItem, field);
       }
     },
   };

@@ -41,6 +41,7 @@ const App = () => {
     <CellRender
       originalProps={props}
       td={td}
+      cancel={cancel}
       editField={editField}
       enterEdit={enterEdit}
       exitEdit={exitEdit}
@@ -82,13 +83,23 @@ const App = () => {
     setData(newData);
   };
 
-  const cancel = (dataItem) => {
+  const cancel = (dataItem, field) => {
     const originalItem = dataBeforeSave;
-    const newData = data.map((item) =>
+    const indexItem = data.findIndex((item) =>
       isItemEqualToDataItem(item, dataItem)
-        ? { ...originalItem, [editField]: undefined }
-        : item
     );
+    const newData = data.map((item) => {
+      item[editField] = undefined;
+      return item;
+    });
+    newData[indexItem] = originalItem;
+    const obj1 = { dataItem, field, indexItem };
+    console.log(`[cancel]`, { ...obj1, originalItem, newData });
+    // const newData = data.map((item) =>
+    // isItemEqualToDataItem(item, dataItem)
+    // ? { ...originalItem, [editField]: undefined }
+    // : item
+    // );
     setData(newData);
   };
 
@@ -110,6 +121,7 @@ const App = () => {
   };
 
   const itemChange = (event) => {
+    console.log(`item change is called`);
     const { dataItem, field, value } = event;
     const newData = data.map((item) => {
       if (isItemEqualToDataItem(item, dataItem)) {
@@ -137,46 +149,43 @@ const App = () => {
     const columnIndex = columns.findIndex((column) => column.field === field);
     const nextColumnIndex = columnIndex + 1;
     const isLastColumn = nextColumnIndex === columns.length;
-    const obj = {
-      dataItem,
-      field,
-      columns,
-      columnIndex,
-      nextColumnIndex,
-      isLastColumn,
-    };
-    console.log('[focusNextCell]', obj);
+
+    const obj1 = { dataItem, field, columns };
+    const obj2 = { columnIndex, nextColumnIndex, isLastColumn };
+    console.log('[focusNextCell]', { ...obj1, ...obj2 });
+
     if (isLastColumn) {
       const nextLineIndex = editedLineIndex + 1;
       const isLastLine = nextLineIndex === data.length;
 
       if (isLastLine) {
         exitEdit();
-      } else {
-        //
-        const nextEditableColumn = getFirstEditableColumn(columns);
-        const newData = data.map((item, index) => {
-          if (index === editedLineIndex) {
-            item[editField] = undefined;
-          }
-          if (index === nextLineIndex) {
-            item[editField] = nextEditableColumn?.field;
-          }
-          return item;
-        });
-        setData(newData);
+        return;
       }
-    } else {
-      setTimeout(() => {
-        // dataItem[editField] = columns[nextColumnIndex].field;
-        const newData = data.map((item) => {
-          if (isItemEqualToDataItem(item, dataItem)) {
-            item[editField] = columns[nextColumnIndex].field;
-          }
-          return item;
-        });
-        setData(newData);
+
+      // Navigate to the first editable column in the next line
+      const nextEditableColumn = getFirstEditableColumn(columns);
+      const newData = data.map((item, index) => {
+        if (index === editedLineIndex) {
+          item[editField] = undefined;
+        }
+        if (index === nextLineIndex) {
+          item[editField] = nextEditableColumn?.field;
+        }
+        return item;
       });
+      const newDataItem = newData[nextLineIndex];
+      setDataBeforeSave({ ...newDataItem });
+      setData(newData);
+    } else {
+      // dataItem[editField] = columns[nextColumnIndex].field;
+      const newData = data.map((item) => {
+        if (isItemEqualToDataItem(item, dataItem)) {
+          item[editField] = columns[nextColumnIndex].field;
+        }
+        return item;
+      });
+      setData(newData);
     }
   };
 
@@ -188,6 +197,7 @@ const App = () => {
       rowRender={customRowRender}
       editField={editField}
       dataItemKey={dataItemKey}
+      resizable
     >
       <GridToolbar>
         <button
@@ -201,7 +211,7 @@ const App = () => {
       {columns.map((column) => (
         <Column {...column} />
       ))}
-      <Column cell={CommandCell} width="100px" />
+      <Column cell={CommandCell} width="92px" />
     </Grid>
   );
 };

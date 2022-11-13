@@ -51,6 +51,6 @@ export const createNewItem = () => ({
   [editField]: true,
   Discontinued: false,
   ProductID: undefined,
-  FirstOrderedOn: undefined, // new Date(),
-  DeliveredOn: undefined, // new Date(),
+  FirstOrderedOn: null, // new Date(),
+  DeliveredOn: null, // new Date(),
 });
