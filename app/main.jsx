@@ -45,6 +45,7 @@ const App = () => {
       editField={editField}
       enterEdit={enterEdit}
       exitEdit={exitEdit}
+      focusNextCell={focusNextCell}
     />
   );
 
@@ -136,42 +137,45 @@ const App = () => {
       isItemEqualToDataItem(item, dataItem)
     );
 
-    if (editedLineIndex !== -1) {
-      const columnIndex = columns.indexOf((column) => column.field === field);
-      const nextColumnIndex = columnIndex + 1;
-      const isLastColumn = nextColumnIndex === columns.length;
-      if (isLastColumn) {
-        const nextLineIndex = editedLineIndex + 1;
-        const isLastLine = nextLineIndex === data.length;
+    if (editedLineIndex === -1) {
+    }
 
-        if (isLastLine) {
-          exitEdit();
-        } else {
-          // remove
-          const nextEditableColumn = columns.find(
-            (column) => column.editable !== false
-          );
-          const newData = data.map((item, index) => {
-            if (index === editedLineIndex) {
-              item[editField] = undefined;
-            }
-            if (index === nextLineIndex) {
-              item[editField] = nextEditableColumn?.field;
-            }
-            return item;
-          });
-          setData(newData);
-        }
+    const columnIndex = columns.indexOf((column) => column.field === field);
+    const nextColumnIndex = columnIndex + 1;
+    const isLastColumn = nextColumnIndex === columns.length;
+    const obj = { columnIndex, nextColumnIndex, isLastColumn };
+    console.log('[focusNextCell]', obj);
+    if (isLastColumn) {
+      const nextLineIndex = editedLineIndex + 1;
+      const isLastLine = nextLineIndex === data.length;
+
+      if (isLastLine) {
+        exitEdit();
       } else {
-        // dataItem[editField] = columns[nextColumnIndex].field;
-        const newData = data.map((item) => {
-          if (isItemEqualToDataItem(item, dataItem)) {
-            item[editField] = columns[nextColumnIndex].field;
+        // remove
+        const nextEditableColumn = columns.find(
+          (column) => column.editable !== false
+        );
+        const newData = data.map((item, index) => {
+          if (index === editedLineIndex) {
+            item[editField] = undefined;
+          }
+          if (index === nextLineIndex) {
+            item[editField] = nextEditableColumn?.field;
           }
           return item;
         });
         setData(newData);
       }
+    } else {
+      // dataItem[editField] = columns[nextColumnIndex].field;
+      const newData = data.map((item) => {
+        if (isItemEqualToDataItem(item, dataItem)) {
+          item[editField] = columns[nextColumnIndex].field;
+        }
+        return item;
+      });
+      setData(newData);
     }
   };
 

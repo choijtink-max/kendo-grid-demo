@@ -9,7 +9,7 @@ const CellRender = (props) => {
   const { enterEdit, exitEdit, focusNextCell, originalProps, td } = props;
   const { dataItem, field } = originalProps;
   const inEditField = dataItem[props[editField] || ''];
-  const additionalProps =
+  const extraProps =
     field && field === inEditField
       ? {
           ref: (td) => {
@@ -29,16 +29,6 @@ const CellRender = (props) => {
               input.select();
             }
           },
-          onKeyDown: (event) => {
-            const { keyCode } = event;
-            if (keyCode === TAB_KEY || keyCode === ENTER_KEY) {
-              const obj = { keyCode, dataItem, field };
-              console.log('focusNextCell will be called', obj);
-              focusNextCell(event, dataItem, field);
-            } else if (keyCode === ESC_KEY) {
-              exitEdit();
-            }
-          },
         }
       : {
           onClick: () => {
@@ -46,6 +36,20 @@ const CellRender = (props) => {
           },
         };
 
+  const additionalProps = {
+    ...extraProps,
+    onKeyDown: (event) => {
+      const { keyCode } = event;
+      console.log(`on key down is called`);
+      if (keyCode === TAB_KEY || keyCode === ENTER_KEY) {
+        const obj = { keyCode, dataItem, field };
+        console.log('focusNextCell will be called', obj);
+        focusNextCell(event, dataItem, field);
+      } else if (keyCode === ESC_KEY) {
+        exitEdit();
+      }
+    },
+  };
   const clonedProps = { ...td.props, ...additionalProps };
   const childNodes = td.props.children;
   return React.cloneElement(td, clonedProps, childNodes);
