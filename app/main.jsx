@@ -9,6 +9,9 @@ import { sampleProducts } from './sample-products';
 import ActionCommandCell from './cells/ActionCommandCell';
 import DateCell from './cells/DateCell';
 import DropDownCell from './cells/DropDownCell';
+import CellRender from './renderers/CellRenderer';
+import columns from './columns';
+import RowRender from './renderers/RowRenderer';
 import {
   dataItemKey,
   deleteItem,
@@ -17,8 +20,6 @@ import {
   insertItem,
   updateItem,
 } from './services';
-import CellRender from './renderers/CellRenderer';
-import RowRender from './renderers/RowRenderer';
 
 const App = () => {
   const [data, setData] = useState(sampleProducts);
@@ -41,8 +42,9 @@ const App = () => {
     <CellRender
       originalProps={props}
       td={td}
-      enterEdit={enterEdit}
       editField={editField}
+      enterEdit={enterEdit}
+      exitEdit={exitEdit}
     />
   );
 
@@ -50,8 +52,8 @@ const App = () => {
     <RowRender
       originalProps={props}
       tr={tr}
-      exitEdit={exitEdit}
       editField={editField}
+      exitEdit={exitEdit}
     />
   );
 
@@ -113,7 +115,6 @@ const App = () => {
       if (isItemEqualToDataItem(item, dataItem)) {
         item[field] = value;
       }
-
       return item;
     });
     setData(newData);
@@ -128,6 +129,50 @@ const App = () => {
     };
     setDataBeforeSave({ ...newDataItem });
     setData([newDataItem, ...data]);
+  };
+
+  const focusNextCell = (event, dataItem, field) => {
+    const editedLineIndex = data.findIndex((item) =>
+      isItemEqualToDataItem(item, dataItem)
+    );
+
+    if (editedLineIndex !== -1) {
+      const columnIndex = columns.indexOf((column) => column.field === field);
+      const nextColumnIndex = columnIndex + 1;
+      const isLastColumn = nextColumnIndex === columns.length;
+      if (isLastColumn) {
+        const nextLineIndex = editedLineIndex + 1;
+        const isLastLine = nextLineIndex === data.length;
+
+        if (isLastLine) {
+          exitEdit();
+        } else {
+          // remove
+          const nextEditableColumn = columns.find(
+            (column) => column.editable !== false
+          );
+          const newData = data.map((item, index) => {
+            if (index === editedLineIndex) {
+              item[editField] = undefined;
+            }
+            if (index === nextLineIndex) {
+              item[editField] = nextEditableColumn?.field;
+            }
+            return item;
+          });
+          setData(newData);
+        }
+      } else {
+        // dataItem[editField] = columns[nextColumnIndex].field;
+        const newData = data.map((item) => {
+          if (isItemEqualToDataItem(item, dataItem)) {
+            item[editField] = columns[nextColumnIndex].field;
+          }
+          return item;
+        });
+        setData(newData);
+      }
+    }
   };
 
   return (
@@ -148,7 +193,7 @@ const App = () => {
           Add new
         </button>
       </GridToolbar>
-      <Column field="ProductID" title="Id" width="40px" editable={false} />
+      {/* <Column field="ProductID" title="Id" width="40px" editable={false} />
       <Column field="ProductName" title="Product Name" width="150px" />
       <Column
         field="FirstOrderedOn"
@@ -174,7 +219,10 @@ const App = () => {
         title="Discontinued"
         cell={DropDownCell}
         width="120px"
-      />
+      /> */}
+      {columns.map((column) => (
+        <Column {...column} />
+      ))}
       <Column cell={CommandCell} width="120px" />
     </Grid>
   );
