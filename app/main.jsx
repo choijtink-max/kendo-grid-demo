@@ -8,7 +8,7 @@ import {
 import { sampleProducts } from './sample-products';
 import ActionCommandCell from './cells/ActionCommandCell';
 import CellRender from './renderers/CellRenderer';
-import columns from './columns';
+import { columns, getFirstEditableColumn } from './columns';
 import RowRender from './renderers/RowRenderer';
 import {
   dataItemKey,
@@ -158,21 +158,17 @@ const App = () => {
         exitEdit();
       } else {
         //
-        setTimeout(() => {
-          const nextEditableColumn = columns.find(
-            (column) => column.editable !== false
-          );
-          const newData = data.map((item, index) => {
-            if (index === editedLineIndex) {
-              item[editField] = undefined;
-            }
-            if (index === nextLineIndex) {
-              item[editField] = nextEditableColumn?.field;
-            }
-            return item;
-          });
-          setData(newData);
+        const nextEditableColumn = getFirstEditableColumn(columns);
+        const newData = data.map((item, index) => {
+          if (index === editedLineIndex) {
+            item[editField] = undefined;
+          }
+          if (index === nextLineIndex) {
+            item[editField] = nextEditableColumn?.field;
+          }
+          return item;
         });
+        setData(newData);
       }
     } else {
       setTimeout(() => {
@@ -209,7 +205,7 @@ const App = () => {
       {columns.map((column) => (
         <Column {...column} />
       ))}
-      <Column cell={CommandCell} width="120px" />
+      <Column cell={CommandCell} width="100px" />
     </Grid>
   );
 };

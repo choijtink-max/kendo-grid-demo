@@ -40,10 +40,8 @@ const CellRender = (props) => {
     ...extraProps,
     onKeyDown: (event) => {
       const { keyCode } = event;
-      console.log(`on key down is called | keyCode: ${keyCode}`);
       if (keyCode === TAB_KEY || keyCode === ENTER_KEY) {
-        // const obj = { keyCode, dataItem, field };
-        // console.log('focusNextCell will be called', obj);
+        event.preventDefault();
         focusNextCell(event, dataItem, field);
       } else if (keyCode === ESC_KEY) {
         exitEdit();
