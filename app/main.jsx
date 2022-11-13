@@ -140,10 +140,17 @@ const App = () => {
     if (editedLineIndex === -1) {
     }
 
-    const columnIndex = columns.indexOf((column) => column.field === field);
+    const columnIndex = columns.findIndex((column) => column.field === field);
     const nextColumnIndex = columnIndex + 1;
     const isLastColumn = nextColumnIndex === columns.length;
-    const obj = { columnIndex, nextColumnIndex, isLastColumn };
+    const obj = {
+      dataItem,
+      field,
+      columns,
+      columnIndex,
+      nextColumnIndex,
+      isLastColumn,
+    };
     console.log('[focusNextCell]', obj);
     if (isLastColumn) {
       const nextLineIndex = editedLineIndex + 1;
@@ -197,33 +204,6 @@ const App = () => {
           Add new
         </button>
       </GridToolbar>
-      {/* <Column field="ProductID" title="Id" width="40px" editable={false} />
-      <Column field="ProductName" title="Product Name" width="150px" />
-      <Column
-        field="FirstOrderedOn"
-        title="First Ordered"
-        editor="date"
-        format="{0:d}"
-        width="140px"
-      />
-      <Column
-        field="DeliveredOn"
-        title="Delivered On"
-        cell={DateCell}
-        width="140px"
-      />
-      <Column
-        field="UnitsInStock"
-        title="Units"
-        editor="numeric"
-        width="100px"
-      />
-      <Column
-        field="Discontinued"
-        title="Discontinued"
-        cell={DropDownCell}
-        width="120px"
-      /> */}
       {columns.map((column) => (
         <Column {...column} />
       ))}

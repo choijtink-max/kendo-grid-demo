@@ -8,7 +8,7 @@ const ESC_KEY = 27;
 const CellRender = (props) => {
   const { enterEdit, exitEdit, focusNextCell, originalProps, td } = props;
   const { dataItem, field } = originalProps;
-  const inEditField = dataItem[props[editField] || ''];
+  const inEditField = dataItem[editField];
   const extraProps =
     field && field === inEditField
       ? {
@@ -23,7 +23,7 @@ const CellRender = (props) => {
             ) {
               return;
             }
-            if (input.type === 'checkbox') {
+            if (input?.type === 'checkbox') {
               input.focus();
             } else {
               input.select();
@@ -40,10 +40,10 @@ const CellRender = (props) => {
     ...extraProps,
     onKeyDown: (event) => {
       const { keyCode } = event;
-      console.log(`on key down is called`);
+      console.log(`on key down is called | keyCode: ${keyCode}`);
       if (keyCode === TAB_KEY || keyCode === ENTER_KEY) {
-        const obj = { keyCode, dataItem, field };
-        console.log('focusNextCell will be called', obj);
+        // const obj = { keyCode, dataItem, field };
+        // console.log('focusNextCell will be called', obj);
         focusNextCell(event, dataItem, field);
       } else if (keyCode === ESC_KEY) {
         exitEdit();
