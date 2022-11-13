@@ -1,11 +1,12 @@
 import * as React from 'react';
+import { editField } from '../services';
 
 const CellRender = (props) => {
-  const dataItem = props.originalProps.dataItem;
-  const cellField = props.originalProps.field;
-  const inEditField = dataItem[props.editField || ''];
+  const { enterEdit, originalProps, td } = props;
+  const { dataItem, field } = originalProps;
+  const inEditField = dataItem[props[editField] || ''];
   const additionalProps =
-    cellField && cellField === inEditField
+    field && field === inEditField
       ? {
           ref: (td) => {
             const input = td && td.querySelector('input');
@@ -27,13 +28,13 @@ const CellRender = (props) => {
         }
       : {
           onClick: () => {
-            props.enterEdit(dataItem, cellField);
+            enterEdit(dataItem, field);
           },
         };
 
-  const clonedProps = { ...props.td.props, ...additionalProps };
-  const childNodes = props.td.props.children;
-  return React.cloneElement(props.td, clonedProps, childNodes);
+  const clonedProps = { ...td.props, ...additionalProps };
+  const childNodes = td.props.children;
+  return React.cloneElement(td, clonedProps, childNodes);
 };
 
 export default CellRender;

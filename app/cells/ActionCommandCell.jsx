@@ -1,10 +1,11 @@
 import * as React from 'react';
+import { dataItemKey } from '../services';
 
 const ActionCommandCell = (props) => {
-  const { add, cancel, dataItem, discard, edit, editField, update, render } =
+  const { add, cancel, dataItem, discard, edit, editField, update, render, remove } =
     props;
   const inEdit = dataItem[editField];
-  const isNewItem = dataItem.ProductID === undefined;
+  const isNewItem = dataItem[dataItemKey] === undefined;
 
   const renderInEdit = () => (
     <td className="k-command-cell">

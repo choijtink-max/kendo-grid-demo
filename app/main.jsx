@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import * as ReactDOM from 'react-dom';
 import {
   Grid,
@@ -9,17 +9,24 @@ import { sampleProducts } from './sample-products';
 import ActionCommandCell from './cells/ActionCommandCell';
 import DateCell from './cells/DateCell';
 import DropDownCell from './cells/DropDownCell';
-import { deleteItem, editField, getItems, insertItem, updateItem } from './services';
+import {
+  dataItemKey,
+  deleteItem,
+  editField,
+  isItemEqualToDataItem,
+  insertItem,
+  updateItem,
+} from './services';
 import CellRender from './renderers/CellRenderer';
 import RowRender from './renderers/RowRenderer';
 
 const App = () => {
-  const [data, setData] = React.useState(sampleProducts);
+  const [data, setData] = useState(sampleProducts);
+  const [dataBeforeSave, setDataBeforeSave] = useState(sampleProducts);
 
   const CommandCell = (props) => (
     <ActionCommandCell
       {...props}
-      render={props.render}
       edit={enterEdit}
       remove={remove}
       add={add}
@@ -32,19 +39,19 @@ const App = () => {
 
   // modify the data in the store, db etc
   const remove = (dataItem) => {
-    const newData = deleteItem(dataItem);
+    const newData = deleteItem(dataItem, data);
     setData(newData);
   };
 
   const add = (dataItem) => {
     dataItem[editField] = true;
-    const newData = insertItem(dataItem);
+    const newData = insertItem(dataItem, data);
     setData(newData);
   };
 
   const update = (dataItem) => {
     dataItem[editField] = false;
-    const newData = updateItem(dataItem);
+    const newData = updateItem(dataItem, data);
     setData(newData);
   };
 
@@ -55,28 +62,21 @@ const App = () => {
     setData(newData);
   };
 
-  const isEqual = (a, b, key = 'ProductID') => a[key] === b[key];
-  const isItemEqualToDataItem = (dataItem, item) => {
-    if (!item) {
-      return (checkedItem) => isEqual(dataItem, checkedItem);
-    }
-    return isEqual(dataItem, item);
-  };
-
   const cancel = (dataItem) => {
-    const originalItem = getItems().find((item) =>
-      isItemEqualToDataItem(dataItem, item)
-    );
+    const originalItem = dataBeforeSave;
     const newData = data.map((item) =>
-      item?.ProductID === originalItem?.ProductID ? originalItem : item
+      isItemEqualToDataItem(item, dataItem)
+        ? { ...originalItem, [editField]: undefined }
+        : item
     );
     setData(newData);
   };
 
-  const enterEdit = (dataItem) => {
+  const enterEdit = (dataItem, field) => {
+    setDataBeforeSave({ ...dataItem });
     let newData = data.map((item) => ({
       ...item,
-      [editField]: isItemEqualToDataItem(dataItem, item),
+      [editField]: isItemEqualToDataItem(item, dataItem) ? field : undefined,
     }));
     setData(newData);
   };
@@ -89,16 +89,22 @@ const App = () => {
     setData(newData);
   };
 
-  const itemChange = (event) => {
-    const field = event.field || '';
+  const itemChange1 = (event) => {
+    const { dataItem, field = '', value } = event;
     const newData = data.map((item) =>
-      isItemEqualToDataItem(event.dataItem, item)
-        ? {
-            ...item,
-            [field]: event.value,
-          }
-        : item
+      isItemEqualToDataItem(item, dataItem) ? { ...item, [field]: value } : item
     );
+    setData(newData);
+  };
+
+  const itemChange = (event) => {
+    let field = event.field || '';
+    let newData = data.map((item) => {
+      if (item.ProductID === event.dataItem.ProductID) {
+        item[field] = event.value;
+      }
+      return item;
+    });
     setData(newData);
   };
 
@@ -109,6 +115,7 @@ const App = () => {
       ProductID: undefined,
       DeliveredOn: undefined,
     };
+    setDataBeforeSave({ ...newDataItem });
     setData([newDataItem, ...data]);
   };
 
@@ -137,7 +144,7 @@ const App = () => {
       cellRender={customCellRender}
       rowRender={customRowRender}
       editField={editField}
-      dataItemKey={'ProductID'}
+      dataItemKey={dataItemKey}
     >
       <GridToolbar>
         <button

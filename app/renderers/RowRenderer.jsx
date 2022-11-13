@@ -1,23 +1,25 @@
 import * as React from 'react';
 
 const RowRender = (props) => {
+  const { exitEdit, tr } = props;
+
   const trProps = {
-    ...props.tr.props,
+    ...tr.props,
     onBlur: () => {
-      setTimeout(() => {
-        const activeElement = document.activeElement;
-        if (
-          activeElement &&
-          activeElement.className.indexOf('k-calendar') < 0
-        ) {
-          props.exitEdit();
-        }
-      });
+      // setTimeout(() => {
+      //   const activeElement = document.activeElement;
+      //   if (
+      //     activeElement &&
+      //     activeElement.className.indexOf('k-calendar') < 0
+      //   ) {
+      //     exitEdit();
+      //   }
+      // });
     },
   };
 
-  const childNodes = props.tr.props.children;
-  return React.cloneElement(props.tr, { ...trProps }, childNodes);
+  const childNodes = tr.props.children;
+  return React.cloneElement(tr, { ...trProps }, childNodes);
 };
 
 export default RowRender;
