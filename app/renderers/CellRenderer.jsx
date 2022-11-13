@@ -44,7 +44,6 @@ const CellRender = (props) => {
         event.preventDefault();
         focusNextCell(event, dataItem, field);
       } else if (keyCode === ESC_KEY) {
-        console.log(`keyCode is ESC`);
         cancel(dataItem, field);
       }
     },

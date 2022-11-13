@@ -18,6 +18,7 @@ import {
   isItemEqualToDataItem,
   insertItem,
   updateItem,
+  unselectItems,
 } from './services';
 
 const App = () => {
@@ -88,24 +89,17 @@ const App = () => {
     const indexItem = data.findIndex((item) =>
       isItemEqualToDataItem(item, dataItem)
     );
-    const newData = data.map((item) => {
-      item[editField] = undefined;
-      return item;
-    });
-    newData[indexItem] = originalItem;
+    const newData = unselectItems(data);
+    newData[indexItem][field] = originalItem[field];
     const obj1 = { dataItem, field, indexItem };
     console.log(`[cancel]`, { ...obj1, originalItem, newData });
-    // const newData = data.map((item) =>
-    // isItemEqualToDataItem(item, dataItem)
-    // ? { ...originalItem, [editField]: undefined }
-    // : item
-    // );
     setData(newData);
+    setDataBeforeSave(undefined);
   };
 
   const enterEdit = (dataItem, field) => {
     setDataBeforeSave({ ...dataItem });
-    let newData = data.map((item) => ({
+    const newData = data.map((item) => ({
       ...item,
       [editField]: isItemEqualToDataItem(item, dataItem) ? field : undefined,
     }));
@@ -165,15 +159,19 @@ const App = () => {
 
       // Navigate to the first editable column in the next line
       const nextEditableColumn = getFirstEditableColumn(columns);
-      const newData = data.map((item, index) => {
-        if (index === editedLineIndex) {
-          item[editField] = undefined;
-        }
-        if (index === nextLineIndex) {
-          item[editField] = nextEditableColumn?.field;
-        }
-        return item;
-      });
+      // const newData = data.map((item, index) => {
+      //   if (index === editedLineIndex) {
+      //     item[editField] = undefined;
+      //   }
+      //   if (index === nextLineIndex) {
+      //     item[editField] = nextEditableColumn?.field;
+      //   }
+      //   return item;
+      // });
+      const newData = [...data];
+      newData[editedLineIndex][editField] = undefined;
+      newData[nextLineIndex][editField] = nextEditableColumn?.field;
+
       const newDataItem = newData[nextLineIndex];
       setDataBeforeSave({ ...newDataItem });
       setData(newData);

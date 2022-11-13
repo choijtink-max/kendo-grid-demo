@@ -54,3 +54,10 @@ export const createNewItem = () => ({
   FirstOrderedOn: null, // new Date(),
   DeliveredOn: null, // new Date(),
 });
+
+export function unselectItems(data) {
+  return data.map((item) => {
+    item[editField] = undefined;
+    return item;
+  })
+}
