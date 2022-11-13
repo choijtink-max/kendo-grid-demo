@@ -37,6 +37,24 @@ const App = () => {
     />
   );
 
+  const customCellRender = (td, props) => (
+    <CellRender
+      originalProps={props}
+      td={td}
+      enterEdit={enterEdit}
+      editField={editField}
+    />
+  );
+
+  const customRowRender = (tr, props) => (
+    <RowRender
+      originalProps={props}
+      tr={tr}
+      exitEdit={exitEdit}
+      editField={editField}
+    />
+  );
+
   // modify the data in the store, db etc
   const remove = (dataItem) => {
     const newData = deleteItem(dataItem, data);
@@ -89,20 +107,13 @@ const App = () => {
     setData(newData);
   };
 
-  const itemChange1 = (event) => {
-    const { dataItem, field = '', value } = event;
-    const newData = data.map((item) =>
-      isItemEqualToDataItem(item, dataItem) ? { ...item, [field]: value } : item
-    );
-    setData(newData);
-  };
-
   const itemChange = (event) => {
-    let field = event.field || '';
-    let newData = data.map((item) => {
-      if (item.ProductID === event.dataItem.ProductID) {
-        item[field] = event.value;
+    const { dataItem, field, value } = event;
+    const newData = data.map((item) => {
+      if (isItemEqualToDataItem(item, dataItem)) {
+        item[field] = value;
       }
+
       return item;
     });
     setData(newData);
@@ -118,24 +129,6 @@ const App = () => {
     setDataBeforeSave({ ...newDataItem });
     setData([newDataItem, ...data]);
   };
-
-  const customCellRender = (td, props) => (
-    <CellRender
-      originalProps={props}
-      td={td}
-      enterEdit={enterEdit}
-      editField={editField}
-    />
-  );
-
-  const customRowRender = (tr, props) => (
-    <RowRender
-      originalProps={props}
-      tr={tr}
-      exitEdit={exitEdit}
-      editField={editField}
-    />
-  );
 
   return (
     <Grid
@@ -155,23 +148,34 @@ const App = () => {
           Add new
         </button>
       </GridToolbar>
-      <Column field="ProductID" title="Id" width="50px" editable={false} />
-      <Column field="ProductName" title="Product Name" />
+      <Column field="ProductID" title="Id" width="40px" editable={false} />
+      <Column field="ProductName" title="Product Name" width="150px" />
       <Column
         field="FirstOrderedOn"
         title="First Ordered"
         editor="date"
         format="{0:d}"
+        width="140px"
       />
-      {/* <Column
+      <Column
         field="DeliveredOn"
         title="Delivered On"
         cell={DateCell}
         width="140px"
-      /> */}
-      <Column field="UnitsInStock" title="Units" editor="numeric" />
-      <Column field="Discontinued" title="Discontinued" cell={DropDownCell} />
-      <Column cell={CommandCell} width="240px" />
+      />
+      <Column
+        field="UnitsInStock"
+        title="Units"
+        editor="numeric"
+        width="100px"
+      />
+      <Column
+        field="Discontinued"
+        title="Discontinued"
+        cell={DropDownCell}
+        width="120px"
+      />
+      <Column cell={CommandCell} width="120px" />
     </Grid>
   );
 };

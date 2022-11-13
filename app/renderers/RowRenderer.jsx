@@ -6,15 +6,15 @@ const RowRender = (props) => {
   const trProps = {
     ...tr.props,
     onBlur: () => {
-      // setTimeout(() => {
-      //   const activeElement = document.activeElement;
-      //   if (
-      //     activeElement &&
-      //     activeElement.className.indexOf('k-calendar') < 0
-      //   ) {
-      //     exitEdit();
-      //   }
-      // });
+      setTimeout(() => {
+        const activeElement = document.activeElement;
+        if (
+          activeElement &&
+          activeElement.className.indexOf('k-calendar') < 0
+        ) {
+          exitEdit();
+        }
+      });
     },
   };
 
