@@ -286,16 +286,15 @@ const App = () => {
         </button>
       </GridToolbar>
       <Column
-        width="50px"
+        width="40px"
         field={checkedField}
-        className="selection"
         minResizableWidth={40}
         reorderable={false}
         orderIndex={0}
         resizable={false}
+        headerCell={customCheckboxHeaderCell}
         cell={CustomCheckboxCell}
       />
-
       {columns.map((column) => (
         <Column {...column} />
       ))}
