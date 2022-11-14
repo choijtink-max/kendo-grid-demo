@@ -164,6 +164,28 @@ const App = () => {
     setData([newDataItem, ...data]);
   };
 
+  const focusOnNextLine = (editedLineIndex, nextLineIndex, newData, field) => {
+    const isLastLine = nextLineIndex === data.length;
+
+    const columnIndex = columns.findIndex((column) => column.field === field);
+    const nextColumnIndex = columnIndex + 1;
+    const isLastColumn = nextColumnIndex === columns.length;
+
+    if (isLastLine) {
+      exitEdit();
+      return;
+    }
+
+    // Navigate to the first editable column in the next line
+    const nextEditableColumn = getFirstEditableColumn(columns);
+    newData[editedLineIndex][editField] = undefined;
+    newData[nextLineIndex][editField] = nextEditableColumn?.field;
+
+    setData(newData);
+  };
+
+  const focusOnNextCell = () => {};
+
   /**
    * @param {Object} dataItem - The dataItem to update.
    * @param {string} field - The field.
@@ -180,35 +202,22 @@ const App = () => {
     const columnIndex = columns.findIndex((column) => column.field === field);
     const nextColumnIndex = columnIndex + 1;
     const isLastColumn = nextColumnIndex === columns.length;
+    const newData = [...data];
+    let lineToUpdate = editedLineIndex;
 
     if (isLastColumn) {
       const nextLineIndex = editedLineIndex + 1;
-      const isLastLine = nextLineIndex === data.length;
-
-      if (isLastLine) {
-        exitEdit();
-        return;
-      }
-
-      // Navigate to the first editable column in the next line
-      const nextEditableColumn = getFirstEditableColumn(columns);
-      const newData = [...data];
-      newData[editedLineIndex][editField] = undefined;
-      newData[nextLineIndex][editField] = nextEditableColumn?.field;
-
-      const newDataItem = newData[nextLineIndex];
-      setDataBeforeSave({ ...newDataItem });
-      setData(newData);
+      lineToUpdate = nextLineIndex;
+      focusOnNextLine(editedLineIndex, nextLineIndex, newData, field);
     } else {
-      // dataItem[editField] = columns[nextColumnIndex].field;
-      const newData = data.map((item) => {
-        if (isItemEqualToDataItem(item, dataItem)) {
-          item[editField] = columns[nextColumnIndex].field;
-        }
-        return item;
-      });
+      // navigate to the next editable column.
+      const nextColumns = columns.slice(nextColumnIndex);
+      const nextColumn = getFirstEditableColumn(nextColumns);
+      newData[editedLineIndex][editField] = nextColumn?.field;
       setData(newData);
     }
+    const newDataItem = newData[lineToUpdate];
+    setDataBeforeSave({ ...newDataItem });
   };
 
   return (
