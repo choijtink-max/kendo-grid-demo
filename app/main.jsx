@@ -32,8 +32,26 @@ const App = () => {
   const [isAllChecked, setIsAllChecked] = useState(false);
 
   const customCheckboxHeaderCell = (props) => (
-    <CheckboxHeaderCell {...props} dataItemKey={dataItemKey} />
+    <CheckboxHeaderCell
+      {...props}
+      controlId="controlId"
+      checkedAll={isAllChecked}
+      dataItemKey={dataItemKey}
+      handleSetCheckedAll={handleSetCheckedAll}
+    />
   );
+
+  const handleSetCheckedAll = () => {
+    if (isAllChecked) {
+      const newData = setFieldForEachItem(data, checkedField, false);
+      setIsAllChecked(false);
+      setData(newData);
+    } else {
+      const newData = setFieldForEachItem(data, checkedField, true);
+      setIsAllChecked(true);
+      setData(newData);
+    }
+  };
 
   const CustomCheckboxCell = (props) => (
     <CheckboxCell

@@ -108,6 +108,13 @@ export function unselectItems(data) {
   });
 }
 
+export function setFieldForEachItem(data, field, value) {
+  return data.map((item) => {
+    item[field] = value;
+    return item;
+  })
+}
+
 export function isEveryRowChecked(data) {
   const checkedRows = data.filter((item) => item[checkedField]);
   return checkedRows.length === data.length;
