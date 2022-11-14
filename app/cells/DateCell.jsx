@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { DatePicker } from '@progress/kendo-react-dateinputs';
 import isFunction from 'lodash/isFunction';
+import { editField } from '../constants';
 
 /**
  * This is a own made GridCell which is used for Dates.
@@ -9,7 +10,7 @@ import isFunction from 'lodash/isFunction';
 
 const DateCell = (props) => {
   const { ariaColumnIndex, columnIndex, dataItem, field, render } = props;
-  const isInEdit = field === dataItem.inEdit;
+  const isInEdit = field === dataItem[editField];
   const value = field && dataItem[field] ? dataItem[field] : '19990101';
 
   useEffect(() => {

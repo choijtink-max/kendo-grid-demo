@@ -13,12 +13,13 @@ const CellRender = (props) => {
   const { cancel, enterEdit, focusNextCell, originalProps, td } = props;
   const { checkedField, dataItemKey, editField } = props;
   const { dataItem, field } = originalProps;
-  const inEditField = dataItem[editField];
+  const isEditField = dataItem[editField] === field;
 
   const additionalProps = {
     checkedField,
     dataItemKey,
     editField,
+    isEditField,
     onKeyDown: (event) => {
       const { keyCode } = event;
       if (keyCode === TAB_KEY || keyCode === ENTER_KEY) {
@@ -41,8 +42,7 @@ const CellRender = (props) => {
     // },
   };
 
-  const isCurrentCellEdited = field === inEditField;
-  if (field && isCurrentCellEdited) {
+  if (field && isEditField) {
     Object.assign(additionalProps, {
       ref: (td) => {
         const input = td && td.querySelector('input');
@@ -56,7 +56,7 @@ const CellRender = (props) => {
           return;
         }
         if (input?.type === 'checkbox') {
-          // input.focus();
+          input.focus();
         } else {
           input.select();
         }
@@ -64,15 +64,28 @@ const CellRender = (props) => {
     });
   }
 
-  // const isNotCheckedField = field !== checkedField;
-  if (!isCurrentCellEdited) {
+  const isCheckedField = field === checkedField;
+  if (!isEditField || !isCheckedField) {
     // && isNotCheckedField) {
     Object.assign(additionalProps, {
-      onClick: () => {
+      onClick: (event) => {
+        console.log(`onClick: ${field}`, event);
         enterEdit(dataItem, field);
+      },
+      onBlur: (event) => {
+        console.log(`onBlur: ${field}`, event);
       },
     });
   }
+
+  if (isCheckedField) {
+    Object.assign(additionalProps, {
+      onClick: (event) => {
+        console.log(`onClick: ${field}`, event);
+      },
+    });
+  }
+
   const gridProps = { checkedField, dataItemKey, editField };
   const clonedProps = { ...td.props, ...additionalProps, ...gridProps };
   const childNodes = td.props.children;

@@ -37,15 +37,6 @@ const App = () => {
   const [isItemChecked, setIsItemChecked] = useState(false);
   const [checkedAll, setCheckedAll] = useState(false);
 
-  const customCheckboxHeaderCell = (props) => (
-    <CheckboxHeaderCell
-      {...props}
-      checkedAll={checkedAll}
-      controlId="controlId"
-      handleSetCheckedAll={handleSetCheckedAll}
-    />
-  );
-
   const handleSetCheckedAll = () => {
     if (checkedAll) {
       // Change this to isAllChecked
@@ -63,49 +54,6 @@ const App = () => {
     const checkedItem = data.find((row) => row[checkedField]);
     setIsItemChecked(!isNil(checkedItem));
   }, [data]);
-
-  const CustomCheckboxCell = (props) => (
-    <CheckboxCell
-      {...props}
-      dataItemKey={dataItemKey}
-      onRowChecked={onRowChecked}
-    />
-  );
-
-  const CommandCell = (props) => (
-    <ActionCommandCell
-      {...props}
-      add={add}
-      cancel={cancel}
-      discard={discard}
-      edit={enterEdit}
-      remove={remove}
-      update={update}
-    />
-  );
-
-  const customCellRender = (td, props) => (
-    <CellRender
-      cancel={cancel}
-      checkedField={checkedField}
-      dataItemKey={dataItemKey}
-      editField={editField}
-      enterEdit={enterEdit}
-      exitEdit={exitEdit}
-      focusNextCell={focusNextCell}
-      originalProps={props}
-      td={td}
-    />
-  );
-
-  const customRowRender = (tr, props) => (
-    <RowRender
-      originalProps={props}
-      tr={tr}
-      editField={editField}
-      exitEdit={exitEdit}
-    />
-  );
 
   const onRowChecked = (dataItem, newValue) => {
     if (!isNil(dataBeforeSave)) {
@@ -315,6 +263,58 @@ const App = () => {
     setDataBeforeSave({ ...newDataItem });
   };
 
+  const customCheckboxHeaderCell = (props) => (
+    <CheckboxHeaderCell
+      {...props}
+      checkedAll={checkedAll}
+      controlId="controlId"
+      handleSetCheckedAll={handleSetCheckedAll}
+    />
+  );
+
+  const customCheckboxCell = (props) => (
+    <CheckboxCell
+      {...props}
+      dataItemKey={dataItemKey}
+      onRowChecked={onRowChecked}
+    />
+  );
+
+  const customActionCommandCell = (props) => (
+    <ActionCommandCell
+      {...props}
+      add={add}
+      cancel={cancel}
+      discard={discard}
+      edit={enterEdit}
+      remove={remove}
+      update={update}
+    />
+  );
+
+  const customCellRender = (td, props) => (
+    <CellRender
+      cancel={cancel}
+      checkedField={checkedField}
+      dataItemKey={dataItemKey}
+      editField={editField}
+      enterEdit={enterEdit}
+      exitEdit={exitEdit}
+      focusNextCell={focusNextCell}
+      originalProps={props}
+      td={td}
+    />
+  );
+
+  const customRowRender = (tr, props) => (
+    <RowRender
+      originalProps={props}
+      tr={tr}
+      editField={editField}
+      exitEdit={exitEdit}
+    />
+  );
+
   return (
     <Grid
       data={data}
@@ -350,7 +350,7 @@ const App = () => {
         orderIndex={0}
         resizable={false}
         headerCell={customCheckboxHeaderCell}
-        cell={CustomCheckboxCell}
+        cell={customCheckboxCell}
       />
       {columns
         .filter((column) => !get(column, 'hidden', false))
@@ -359,7 +359,7 @@ const App = () => {
         ))}
       <Column
         editable={false}
-        cell={CommandCell}
+        cell={customActionCommandCell}
         resizable={false}
         width="120px"
       />
