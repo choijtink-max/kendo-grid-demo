@@ -1,6 +1,11 @@
 import * as React from 'react';
 import { editField } from '../services';
 
+/**
+ * Responsible for rendering each Cell and adding properties to it.
+ * This is similar to GridCellWeb for us.
+ */
+
 const TAB_KEY = 9;
 const ENTER_KEY = 13;
 const ESC_KEY = 27;

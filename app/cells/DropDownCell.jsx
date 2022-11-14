@@ -43,6 +43,11 @@ const DropDownCell = (props) => {
     />
   );
 
+  // Every custom Cell renders a <td> back and is not wrapped in different types of components.
+  // This one can be, but are its children. Its children are responsible for handling there own
+  // specific actions. But the top Cell is just return a td and thats it.
+  // I think we need to add functionality to the grid cells like onClick not in the GridCellWeb
+  // but instead add them in the CellRenderer.
   const defaultRendering = (
     <td>
       {dataItem[editField] === field ? renderInEdit() : dataValue.toString()}

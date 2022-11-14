@@ -2,6 +2,11 @@ import React, { useEffect } from 'react';
 import { DatePicker } from '@progress/kendo-react-dateinputs';
 import isFunction from 'lodash/isFunction';
 
+/**
+ * This is a own made GridCell which is used for Dates.
+ * It is setup currently with the Delivered On column.
+ */
+
 const DateCell = (props) => {
   const { ariaColumnIndex, columnIndex, dataItem, field, render } = props;
   const isInEdit = field === dataItem.inEdit;
@@ -52,6 +57,8 @@ const DateCell = (props) => {
     </td>
   );
 
+  // We call the render function in here instead of return the
+  // defaultRendering, so the CellRenderer is still getting called.
   return render?.call(undefined, defaultRendering, props);
 };
 

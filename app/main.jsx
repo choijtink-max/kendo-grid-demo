@@ -108,8 +108,6 @@ const App = () => {
     );
     const newData = unselectItems(data);
     newData[indexItem][field] = originalItem[field];
-    const obj1 = { dataItem, field, indexItem };
-    console.log(`[cancel]`, { ...obj1, originalItem, newData });
     setData(newData);
     setDataBeforeSave(undefined);
   };
@@ -164,6 +162,25 @@ const App = () => {
     setData([newDataItem, ...data]);
   };
 
+  /**
+   * @param {number} editedLineIndex - The index of line that is being edited.
+   * @param {number} nextColumnIndex - The index of the next column to navigate to.
+   * @param {Array<Object>} newData - The new grid data.
+   */
+  const focusOnNextCell = (editedLineIndex, nextColumnIndex, newData) => {
+    // navigate to the next editable column.
+    const nextColumns = columns.slice(nextColumnIndex);
+    const nextColumn = getFirstEditableColumn(nextColumns);
+    newData[editedLineIndex][editField] = nextColumn?.field;
+    setData(newData);
+  };
+
+  /**
+   * @param {number} editedLineIndex - The index of line that is being edited.
+   * @param {number} nextLineIndex - The index of the next line to navigate to.
+   * @param {Array<Object>} newData - The new grid data.
+   * @param {string} field - The field from the currently visible grid cell.
+   */
   const focusOnNextLine = (editedLineIndex, nextLineIndex, newData, field) => {
     const isLastLine = nextLineIndex === data.length;
 
@@ -181,14 +198,6 @@ const App = () => {
     newData[editedLineIndex][editField] = undefined;
     newData[nextLineIndex][editField] = nextEditableColumn?.field;
 
-    setData(newData);
-  };
-
-  const focusOnNextCell = (editedLineIndex, nextColumnIndex, newData) => {
-    // navigate to the next editable column.
-    const nextColumns = columns.slice(nextColumnIndex);
-    const nextColumn = getFirstEditableColumn(nextColumns);
-    newData[editedLineIndex][editField] = nextColumn?.field;
     setData(newData);
   };
 

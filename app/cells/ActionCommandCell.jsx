@@ -1,6 +1,11 @@
 import * as React from 'react';
 import { dataItemKey } from '../services';
 
+/**
+ * This is the last grid column that has the remove button
+ * and has the save button when a new item was added.
+ */
+
 const ActionCommandCell = (props) => {
   // const { add, cancel, discard, edit, update } = props;
   const { add, dataItem, editField, render, remove } = props;
