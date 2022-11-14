@@ -6,7 +6,7 @@ export function createColumn(field, title, width, props = {}) {
 }
 
 export const columns = [
-  createColumn('ProductID', 'Id', 40, {
+  createColumn('ProductID', 'Id', 44, {
     editable: false,
     resizable: false,
   }),

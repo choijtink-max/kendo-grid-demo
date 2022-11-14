@@ -1,5 +1,5 @@
 import { sampleProducts } from './sample-products';
-import { checkedField, dataItemKey } from './constants';
+import { checkedField, dataItemKey, editField } from './constants';
 
 const initialData = [...sampleProducts];
 

@@ -10,16 +10,13 @@ import isNil from 'lodash/isNil';
 import ActionCommandCell from './cells/ActionCommandCell';
 import CheckboxCell from './cells/CheckboxCell';
 import CheckboxHeaderCell from './header-cells/CheckboxHeaderCell';
-
+import { checkedField, dataItemKey, editField } from './constants';
 import { columns, getFirstEditableColumn } from './columns';
 import CellRender from './renderers/CellRenderer';
 import RowRender from './renderers/RowRenderer';
 import {
-  checkedField,
   createNewItem,
-  dataItemKey,
   deleteItem,
-  editField,
   getItems,
   isEveryRowChecked,
   isItemEqualToDataItem,
