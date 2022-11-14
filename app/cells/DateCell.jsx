@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import { DatePicker } from '@progress/kendo-react-dateinputs';
 import isFunction from 'lodash/isFunction';
 
@@ -6,6 +6,13 @@ const DateCell = (props) => {
   const { ariaColumnIndex, columnIndex, dataItem, field, render } = props;
   const isInEdit = field === dataItem.inEdit;
   const value = field && dataItem[field] ? dataItem[field] : '19990101';
+
+  useEffect(() => {
+    console.log(`[DateCell] mount`);
+    return () => {
+      console.log(`[DateCell] unmount`);
+    };
+  }, []);
 
   const onChange = (e) => {
     if (props.onChange) {
