@@ -26,6 +26,7 @@ import {
   updateItem,
   unselectItems,
   isItemEqualToDataItemCallback,
+  setFieldForEachItem,
 } from './services';
 
 const App = () => {
@@ -179,10 +180,13 @@ const App = () => {
    */
   const enterEdit = (dataItem, field) => {
     setDataBeforeSave({ ...dataItem });
-    const newData = data.map((item) => ({
-      ...item,
-      [editField]: isItemEqualToDataItem(item, dataItem) ? field : undefined,
-    }));
+    // const newData = data.map((item) => ({
+    //   ...item,
+    //   [editField]: isItemEqualToDataItem(item, dataItem) ? field : undefined,
+    // }));
+    const newData = setFieldForEachItem(data, editField, (item) =>
+      isItemEqualToDataItem(item, dataItem) ? field : undefined
+    );
     setData(newData);
   };
 

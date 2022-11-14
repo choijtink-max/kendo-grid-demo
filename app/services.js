@@ -1,5 +1,6 @@
 import { sampleProducts } from './sample-products';
 import { checkedField, dataItemKey, editField } from './constants';
+import isFunction from 'lodash/isFunction';
 
 const initialData = [...sampleProducts];
 
@@ -86,9 +87,9 @@ export const deleteItem = (item, data) => {
 };
 
 export const deleteItems = (items, data, key = dataItemKey) => {
-  const idsFromItesToRemove = items.map(item => item[key]);
+  const idsFromItesToRemove = items.map((item) => item[key]);
   return data.filter((item) => !idsFromItesToRemove.includes(item[key]));
-}
+};
 
 /**
  * @param {Array<Object>} data - The grid data.
@@ -114,10 +115,11 @@ export function unselectItems(data) {
 }
 
 export function setFieldForEachItem(data, field, value) {
+  const isCallback = isFunction(value);
   return data.map((item) => {
-    item[field] = value;
+    item[field] = isCallback ? value.call(this, item) : value;
     return item;
-  })
+  });
 }
 
 export function isEveryRowChecked(data) {
@@ -125,10 +127,14 @@ export function isEveryRowChecked(data) {
   return checkedRows.length === data.length;
 }
 
-export function getItemsHavingCheckedSetTo(expectedValue, data, checkedKey = checkedField) {
-  return data.filter(item => item[checkedKey] === true)
+export function getItemsHavingCheckedSetTo(
+  expectedValue,
+  data,
+  checkedKey = checkedField
+) {
+  return data.filter((item) => item[checkedKey] === true);
 }
 
 export function getCheckedItems(data, checkedKey = checkedField) {
-  return data.filter(item => item[checkedKey] === true)
+  return data.filter((item) => item[checkedKey] === true);
 }

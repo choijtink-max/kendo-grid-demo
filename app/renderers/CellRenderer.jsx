@@ -52,6 +52,17 @@ const CellRender = (props) => {
         cancel(dataItem, field);
       }
     },
+    onBlur: () => {
+      setTimeout(() => {
+        const activeElement = document.activeElement;
+        if (
+          activeElement &&
+          activeElement.className.indexOf('k-calendar') < 0
+        ) {
+          cancel(dataItem, field);
+        }
+      });
+    },
   };
   const clonedProps = { ...td.props, ...additionalProps };
   const childNodes = td.props.children;
