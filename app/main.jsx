@@ -74,13 +74,14 @@ const App = () => {
   const CommandCell = (props) => (
     <ActionCommandCell
       {...props}
-      edit={enterEdit}
-      remove={remove}
       add={add}
-      discard={discard}
-      update={update}
       cancel={cancel}
+      dataItemKey={dataItemKey}
+      discard={discard}
+      edit={enterEdit}
       editField={editField}
+      remove={remove}
+      update={update}
     />
   );
 
@@ -222,6 +223,9 @@ const App = () => {
     setData([newDataItem, ...data]);
   };
 
+  /**
+   *
+   */
   const removeChecked = () => {
     const checkedItems = getCheckedItems(data, checkedField);
     const newData = deleteItems(checkedItems, data, checkedField);
@@ -341,7 +345,7 @@ const App = () => {
         editable={false}
         cell={CommandCell}
         resizable={false}
-        width="100px"
+        width="1200px"
       />
     </Grid>
   );
