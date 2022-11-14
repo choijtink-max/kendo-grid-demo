@@ -184,7 +184,13 @@ const App = () => {
     setData(newData);
   };
 
-  const focusOnNextCell = () => {};
+  const focusOnNextCell = (editedLineIndex, nextColumnIndex, newData) => {
+    // navigate to the next editable column.
+    const nextColumns = columns.slice(nextColumnIndex);
+    const nextColumn = getFirstEditableColumn(nextColumns);
+    newData[editedLineIndex][editField] = nextColumn?.field;
+    setData(newData);
+  };
 
   /**
    * @param {Object} dataItem - The dataItem to update.
@@ -199,23 +205,19 @@ const App = () => {
       return;
     }
 
+    const nextLineIndex = editedLineIndex + 1;
     const columnIndex = columns.findIndex((column) => column.field === field);
     const nextColumnIndex = columnIndex + 1;
     const isLastColumn = nextColumnIndex === columns.length;
     const newData = [...data];
-    let lineToUpdate = editedLineIndex;
 
     if (isLastColumn) {
-      const nextLineIndex = editedLineIndex + 1;
-      lineToUpdate = nextLineIndex;
       focusOnNextLine(editedLineIndex, nextLineIndex, newData, field);
     } else {
-      // navigate to the next editable column.
-      const nextColumns = columns.slice(nextColumnIndex);
-      const nextColumn = getFirstEditableColumn(nextColumns);
-      newData[editedLineIndex][editField] = nextColumn?.field;
-      setData(newData);
+      focusOnNextCell(editedLineIndex, nextColumnIndex, newData);
     }
+
+    const lineToUpdate = isLastColumn ? nextLineIndex : editedLineIndex;
     const newDataItem = newData[lineToUpdate];
     setDataBeforeSave({ ...newDataItem });
   };
