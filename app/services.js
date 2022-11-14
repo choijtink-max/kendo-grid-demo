@@ -5,21 +5,48 @@ const initialData = [...sampleProducts];
 export const dataItemKey = 'ProductID';
 export const editField = 'inEdit';
 
+/**
+ * @param {Object} a - The first item to check.
+ * @param {Object} b - The second item to check..
+ * @param {string} key - The key used for searching.
+ * @returns {boolean} True if items are equal
+ */
 export function isEqual(a, b, key) {
   return a?.[key] === b?.[key];
 }
 
+/**
+ * @param {Object} item - The item to check.
+ * @param {Object} dataItem - The dataItem to check.
+ * @param {string} key - The key used for searching.
+ * @returns {boolean} True if items are equal
+ */
 export const isItemEqualToDataItem = (item, dataItem, key = dataItemKey) => {
   return isEqual(item, dataItem, key);
 };
 
+/**
+ * @param {Object} dataItem - The dataItem to check.
+ * @param {string} key - The key used for searching.
+ * @returns {Function<boolean>} True if items are equal
+ */
 export const isItemEqualToDataItemCallback = (dataItem, key = dataItemKey) => {
   return (item) => isEqual(item, dataItem, key);
 };
 
+/**
+ * @param {Object} item - The item to delete.
+ * @param {Array<Object>} data - The grid data.
+ * @returns {string} The generated id.
+ */
 export const generateId = (data) =>
   data.reduce((acc, current) => Math.max(acc, current[dataItemKey]), 0) + 1;
 
+/**
+ * @param {Object} item - The item to delete.
+ * @param {Array<Object>} data - The grid data.
+ * @returns {Array<Object>} The updated grid data.
+ */
 export const insertItem = (item, data) => {
   item[dataItemKey] = generateId(data);
   item[editField] = false;
@@ -27,10 +54,18 @@ export const insertItem = (item, data) => {
   return data;
 };
 
+/**
+ *
+ */
 export const getItems = () => {
   return initialData;
 };
 
+/**
+ * @param {Object} item - The item to delete.
+ * @param {Array<Object>} data - The grid data.
+ * @returns {Array<Object>} The unselected grid data.
+ */
 export const updateItem = (item, data) => {
   const index = data.findIndex((dataItem) =>
     isItemEqualToDataItem(item, dataItem)
@@ -39,6 +74,11 @@ export const updateItem = (item, data) => {
   return data;
 };
 
+/**
+ * @param {Object} item - The item to delete.
+ * @param {Array<Object>} data - The grid data.
+ * @returns {Array<Object>} The unselected grid data.
+ */
 export const deleteItem = (item, data) => {
   const index = data.findIndex((dataItem) =>
     isItemEqualToDataItem(item, dataItem)
@@ -47,7 +87,11 @@ export const deleteItem = (item, data) => {
   return data;
 };
 
-export const createNewItem = () => ({
+/**
+ * @param {Array<Object>} data - The grid data.
+ * @returns {Object} The newly created item.
+ */
+export const createNewItem = (data) => ({
   [editField]: true,
   Discontinued: false,
   ProductID: undefined,
@@ -55,9 +99,13 @@ export const createNewItem = () => ({
   DeliveredOn: null, // new Date(),
 });
 
+/**
+ * @param {Array<Object>} data - The grid data.
+ * @returns {Array<Object>} The unselected grid data.
+ */
 export function unselectItems(data) {
   return data.map((item) => {
     item[editField] = undefined;
     return item;
-  })
+  });
 }

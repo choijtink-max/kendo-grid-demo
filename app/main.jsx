@@ -19,6 +19,7 @@ import {
   insertItem,
   updateItem,
   unselectItems,
+  isItemEqualToDataItemCallback,
 } from './services';
 
 const App = () => {
@@ -59,31 +60,47 @@ const App = () => {
     />
   );
 
-  // modify the data in the store, db etc
+  /**
+   * Modify the data in the store, db etc
+   * @param {Object} dataItem - The dataItem to remove.
+   */
   const remove = (dataItem) => {
     const newData = deleteItem(dataItem, data);
     setData(newData);
   };
 
+  /**
+   * @param {Object} dataItem - The dataItem to add.
+   */
   const add = (dataItem) => {
     dataItem[editField] = true;
     const newData = insertItem(dataItem, data);
     setData(newData);
   };
 
+  /**
+   * @param {Object} dataItem - The dataItem to update.
+   */
   const update = (dataItem) => {
     dataItem[editField] = false;
     const newData = updateItem(dataItem, data);
     setData(newData);
   };
 
-  // Local state operations
+  /**
+   * Local state operations
+   * @param {Object} dataItem - The dataItem to update.
+   */
   const discard = (dataItem) => {
     const newData = [...data];
     newData.splice(0, 1);
     setData(newData);
   };
 
+  /**
+   * @param {Object} dataItem - The dataItem to update.
+   * @param {string} field - The field.
+   */
   const cancel = (dataItem, field) => {
     const originalItem = dataBeforeSave;
     const indexItem = data.findIndex((item) =>
@@ -97,6 +114,10 @@ const App = () => {
     setDataBeforeSave(undefined);
   };
 
+  /**
+   * @param {Object} dataItem - The dataItem to update.
+   * @param {string} field - The field.
+   */
   const enterEdit = (dataItem, field) => {
     setDataBeforeSave({ ...dataItem });
     const newData = data.map((item) => ({
@@ -106,6 +127,9 @@ const App = () => {
     setData(newData);
   };
 
+  /**
+   *
+   */
   const exitEdit = () => {
     const newData = data.map((item) => ({
       ...item,
@@ -114,8 +138,13 @@ const App = () => {
     setData(newData);
   };
 
+  /**
+   * @param {Object} event - The event.
+   * @param {Object} event.dataItem - The dataItem.
+   * @param {Object} event.field - The event.
+   * @param {Object} event.value - The value.
+   */
   const itemChange = (event) => {
-    console.log(`item change is called`);
     const { dataItem, field, value } = event;
     const newData = data.map((item) => {
       if (isItemEqualToDataItem(item, dataItem)) {
@@ -126,27 +155,31 @@ const App = () => {
     setData(newData);
   };
 
+  /**
+   *
+   */
   const addNew = () => {
-    const newDataItem = createNewItem();
+    const newDataItem = createNewItem(data);
     setDataBeforeSave({ ...newDataItem });
     setData([newDataItem, ...data]);
   };
 
-  const focusNextCell = (event, dataItem, field) => {
-    const editedLineIndex = data.findIndex((item) =>
-      isItemEqualToDataItem(item, dataItem)
+  /**
+   * @param {Object} dataItem - The dataItem to update.
+   * @param {string} field - The field.
+   */
+  const focusNextCell = (dataItem, field) => {
+    const editedLineIndex = data.findIndex(
+      isItemEqualToDataItemCallback(dataItem)
     );
 
     if (editedLineIndex === -1) {
+      return;
     }
 
     const columnIndex = columns.findIndex((column) => column.field === field);
     const nextColumnIndex = columnIndex + 1;
     const isLastColumn = nextColumnIndex === columns.length;
-
-    const obj1 = { dataItem, field, columns };
-    const obj2 = { columnIndex, nextColumnIndex, isLastColumn };
-    console.log('[focusNextCell]', { ...obj1, ...obj2 });
 
     if (isLastColumn) {
       const nextLineIndex = editedLineIndex + 1;
@@ -159,15 +192,6 @@ const App = () => {
 
       // Navigate to the first editable column in the next line
       const nextEditableColumn = getFirstEditableColumn(columns);
-      // const newData = data.map((item, index) => {
-      //   if (index === editedLineIndex) {
-      //     item[editField] = undefined;
-      //   }
-      //   if (index === nextLineIndex) {
-      //     item[editField] = nextEditableColumn?.field;
-      //   }
-      //   return item;
-      // });
       const newData = [...data];
       newData[editedLineIndex][editField] = undefined;
       newData[nextLineIndex][editField] = nextEditableColumn?.field;

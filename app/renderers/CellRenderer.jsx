@@ -42,7 +42,7 @@ const CellRender = (props) => {
       const { keyCode } = event;
       if (keyCode === TAB_KEY || keyCode === ENTER_KEY) {
         event.preventDefault();
-        focusNextCell(event, dataItem, field);
+        focusNextCell(dataItem, field);
       } else if (keyCode === ESC_KEY) {
         cancel(dataItem, field);
       }

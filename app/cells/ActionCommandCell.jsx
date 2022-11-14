@@ -3,18 +3,20 @@ import { dataItemKey } from '../services';
 
 const ActionCommandCell = (props) => {
   // const { add, cancel, discard, edit, update } = props;
-  const { dataItem, editField, render, remove } = props;
+  const { add, dataItem, editField, render, remove } = props;
   const inEdit = dataItem[editField];
   const isNewItem = dataItem[dataItemKey] === undefined;
 
   const renderInEdit = () => (
     <td className="k-command-cell">
-      {/* <button
-        className="k-button k-button-md k-rounded-md k-button-solid k-button-solid-base k-grid-save-command"
-        onClick={() => (isNewItem ? add(dataItem) : update(dataItem))}
-      >
-        {isNewItem ? 'Add' : 'Update'}
-      </button> */}
+      {isNewItem && (
+        <button
+          className="k-button k-button-md k-rounded-md k-button-solid k-button-solid-base k-grid-save-command"
+          onClick={() => add(dataItem)}
+        >
+          Save
+        </button>
+      )}
       {/* <button
         className="k-button k-button-md k-rounded-md k-button-solid k-button-solid-base k-grid-cancel-command"
         onClick={() => (isNewItem ? discard(dataItem) : cancel(dataItem))}
