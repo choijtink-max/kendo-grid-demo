@@ -209,11 +209,11 @@ const App = () => {
 
     newData[editedLineIndex][editField] = nextColumn?.field;
     setData(newData);
+    setDataBeforeSave({ ...newData[editedLineIndex] });
   };
 
   /**
    * @param {number} editedLineIndex - The index of line that is being edited.
-   * @param {number} nextLineIndex - The index of the next line to navigate to.
    * @param {Array<Object>} newData - The new grid data.
    * @param {string} field - The field from the currently visible grid cell.
    */
@@ -232,6 +232,7 @@ const App = () => {
     newData[nextLineIndex][editField] = nextEditableColumn?.field;
 
     setData(newData);
+    setDataBeforeSave({ ...newData[nextLineIndex] });
   };
 
   /**
@@ -257,10 +258,6 @@ const App = () => {
     } else {
       focusOnNextCell(editedLineIndex, nextColumnIndex, newData);
     }
-
-    const lineToUpdate = isLastColumn ? nextLineIndex : editedLineIndex;
-    const newDataItem = newData[lineToUpdate];
-    setDataBeforeSave({ ...newDataItem });
   };
 
   const customCheckboxHeaderCell = (props) => (
