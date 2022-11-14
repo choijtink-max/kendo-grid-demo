@@ -5,6 +5,7 @@ import {
   GridColumn as Column,
   GridToolbar,
 } from '@progress/kendo-react-grid';
+import get from 'lodash/get';
 import isNil from 'lodash/isNil';
 
 import ActionCommandCell from './cells/ActionCommandCell';
@@ -15,6 +16,7 @@ import { columns, getFirstEditableColumn } from './columns';
 import CellRender from './renderers/CellRenderer';
 import RowRender from './renderers/RowRenderer';
 import {
+  changeItemValue,
   createNewItem,
   deleteItem,
   deleteItems,
@@ -194,10 +196,11 @@ const App = () => {
    *
    */
   const exitEdit = () => {
-    const newData = data.map((item) => ({
-      ...item,
-      [editField]: undefined,
-    }));
+    // const newData = data.map((item) => ({
+    //   ...item,
+    //   [editField]: undefined,
+    // }));
+    const newData = setFieldForEachItem(data, editField, undefined);
     setData(newData);
   };
 
@@ -209,12 +212,7 @@ const App = () => {
    */
   const itemChange = (event) => {
     const { dataItem, field, value } = event;
-    const newData = data.map((item) => {
-      if (isItemEqualToDataItem(item, dataItem)) {
-        item[field] = value;
-      }
-      return item;
-    });
+    const newData = changeItemValue(data, dataItem, field, value);
     setData(newData);
   };
 
@@ -342,14 +340,16 @@ const App = () => {
         headerCell={customCheckboxHeaderCell}
         cell={CustomCheckboxCell}
       />
-      {columns.map((column) => (
-        <Column {...column} />
-      ))}
+      {columns
+        .filter((column) => !get(column, 'hidden', false))
+        .map((column) => (
+          <Column {...column} />
+        ))}
       <Column
         editable={false}
         cell={CommandCell}
         resizable={false}
-        width="1200px"
+        width="120px"
       />
     </Grid>
   );

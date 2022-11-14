@@ -127,6 +127,15 @@ export function isEveryRowChecked(data) {
   return checkedRows.length === data.length;
 }
 
+export function changeItemValue(data, dataItem, field, value) {
+  return data.map((item) => {
+    if (isItemEqualToDataItem(item, dataItem)) {
+      item[field] = value;
+    }
+    return item;
+  });
+}
+
 export function getItemsHavingCheckedSetTo(
   expectedValue,
   data,

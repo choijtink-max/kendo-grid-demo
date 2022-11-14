@@ -1,3 +1,4 @@
+import checkedField from './constants';
 import DateCell from './cells/DateCell';
 import DropDownCell from './cells/DropDownCell';
 
@@ -6,6 +7,14 @@ export function createColumn(field, title, width, props = {}) {
 }
 
 export const columns = [
+  createColumn(checkedField, undefined, 40, {
+    editable: false,
+    minResizableWidth: 40,
+    orderIndex: 0,
+    reorderable: false,
+    resizable: false,
+    hidden: true,
+  }),
   createColumn('ProductID', 'Id', 44, {
     editable: false,
     resizable: false,

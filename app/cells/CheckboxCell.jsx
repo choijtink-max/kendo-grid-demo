@@ -10,18 +10,20 @@ const CheckboxCell = (props) => {
   const { ariaColumnIndex, dataItem, columnIndex, render } = props;
   const { checkedField, dataItemKey, onRowChecked } = props;
   const _id = dataItem[dataItemKey] || '';
-  const checked = isItemChecked(dataItem, checkedField);
-  const [isChecked, setIsChecked] = useState(isItemChecked(dataItem, checkedField));
+  const [isChecked, setIsChecked] = useState(
+    isItemChecked(dataItem, checkedField)
+  );
+
+  // useEffect(() => {
+
+  // }, [dataItem, checkedField])
 
   useEffect(() => {
-
-  }, [dataItem, checkedField])
-
-  useEffect(() => {
+    const checked = isItemChecked(dataItem, checkedField);
     if (checked !== isChecked) {
       setIsChecked(checked);
     }
-  }, [checked]);
+  }, [dataItem[checkedField]]);
 
   const handleChecked = useCallback(() => {
     const newIsChecked = !isChecked;
