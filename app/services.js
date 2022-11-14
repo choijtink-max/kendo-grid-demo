@@ -1,10 +1,7 @@
 import { sampleProducts } from './sample-products';
+import { checkedField, dataItemKey } from './constants';
 
 const initialData = [...sampleProducts];
-
-export const checkedField = '_checked';
-export const dataItemKey = 'ProductID';
-export const editField = '_editField';
 
 /**
  * @param {Object} a - The first item to check.
@@ -111,7 +108,7 @@ export function unselectItems(data) {
   });
 }
 
-function isEveryRowChecked(data) {
-  const checkedRows = data.filter(item => item[checkedField]);
+export function isEveryRowChecked(data) {
+  const checkedRows = data.filter((item) => item[checkedField]);
   return checkedRows.length === data.length;
 }

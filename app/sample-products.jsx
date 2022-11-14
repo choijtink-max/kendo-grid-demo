@@ -1,7 +1,5 @@
 import flatten from 'lodash/flatten';
-import { dataItemKey, editField } from './services';
-
-// const dataItemKey = 'ProductID';
+import { dataItemKey, editField } from './constants';
 
 const _sampleProducts = [
   {

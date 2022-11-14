@@ -21,6 +21,7 @@ import {
   deleteItem,
   editField,
   getItems,
+  isEveryRowChecked,
   isItemEqualToDataItem,
   insertItem,
   updateItem,
@@ -89,7 +90,7 @@ const App = () => {
     const newData = [...data];
     newData[rowIndex][checkedField] = newValue;
 
-    const checkedAll = isEveryRowChecked(newData);
+    const checkedAll = isEveryRowChecked(data);
     // onCheckAllClick(datasetInstanceId, controlId, checkedAll);
     setIsAllChecked(checkedAll);
     setData(newData);

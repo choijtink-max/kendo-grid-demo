@@ -10,6 +10,7 @@ const CheckboxHeaderCell = (props) => {
         className="k-checkbox"
         key={`checkbox-header-${controlId}`}
         id={`checkbox-header-${controlId}`}
+        style={styling.checkbox}
         onChange={(event) => {
           handleSetCheckedAll(event.target.checked);
         }}

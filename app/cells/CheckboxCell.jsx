@@ -1,19 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-
-const style = {
-  borderColor: `#ffffff`,
-  width: 16,
-  height: 16,
-  margin: 0,
-  padding: 0,
-  lineHeight: 'initial',
-  border: `1px solid rgba(0, 0, 0, 0.08)`,
-  outline: 0,
-  backgroundPosition: 'center',
-  backgroundRepeat: 'no-repeat',
-  backgroundSize: 'contain',
-  display: 'inline-block',
-};
+import { styling } from '../constants';
 
 const CheckboxCell = (props) => {
   const { ariaColumnIndex, dataItem, columnIndex, render } = props;
@@ -38,7 +24,7 @@ const CheckboxCell = (props) => {
   const defaultRendering = (
     <td aria-colindex={ariaColumnIndex} data-grid-col-index={columnIndex}>
       <input
-        style={style}
+        style={styling.checkbox}
         type="checkbox"
         className="k-checkbox"
         key={`${_id}-row-checkbox`}
