@@ -5,10 +5,13 @@ import {
   GridColumn as Column,
   GridToolbar,
 } from '@progress/kendo-react-grid';
-import { sampleProducts } from './sample-products';
+
 import ActionCommandCell from './cells/ActionCommandCell';
-import CellRender from './renderers/CellRenderer';
+import CheckboxCell from './cells/CheckboxCell';
+import CheckboxHeaderCell from './header-cells/CheckboxHeaderCell';
+
 import { columns, getFirstEditableColumn } from './columns';
+import CellRender from './renderers/CellRenderer';
 import RowRender from './renderers/RowRenderer';
 import {
   checkedField,
@@ -24,9 +27,27 @@ import {
   isItemEqualToDataItemCallback,
 } from './services';
 
+
+
 const App = () => {
   const [data, setData] = useState(getItems());
   const [dataBeforeSave, setDataBeforeSave] = useState();
+
+  const customCheckboxHeaderCell = (props) => (
+    <CheckboxHeaderCell
+      {...props}
+      dataItemKey={dataItemKey}
+    />
+  )
+
+  const customCheckboxCell = (props) => (
+    <CheckboxCell
+      {...props}
+      checkedField={checkedField}
+      dataItemKey={dataItemKey}
+      dataItemKey={dataItemKey}
+    />
+  )
 
   const CommandCell = (props) => (
     <ActionCommandCell
@@ -253,15 +274,17 @@ const App = () => {
         </button>
       </GridToolbar>
       <Column
-        key={this.checkedField}
+        key={checkedField}
         width="50px"
-        field={this.checkedField}
+        field={checkedField}
         className="selection"
         minResizableWidth={40}
         reorderable={false}
         orderIndex={0}
+        resizable={false}
+        column={}
       />
-      
+
       {columns.map((column) => (
         <Column {...column} />
       ))}
