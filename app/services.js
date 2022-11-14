@@ -110,3 +110,8 @@ export function unselectItems(data) {
     return item;
   });
 }
+
+function isEveryRowChecked(data) {
+  const checkedRows = data.filter(item => item[checkedField]);
+  return checkedRows.length === data.length;
+}

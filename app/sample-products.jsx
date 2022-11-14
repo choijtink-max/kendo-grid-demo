@@ -199,7 +199,7 @@ const _sampleProducts = [
 function createDataIteration(rows, index = 0) {
   return rows.map((row) => {
     const newProductId = row[dataItemKey] + index * 10;
-    console.log(`createDataIteration`, { row, newProductId });
+    // console.log(`createDataIteration`, { row, newProductId });
     return {
       ...row,
       [dataItemKey]: newProductId,
@@ -212,10 +212,10 @@ function createData(data, numberOfIterations = 10) {
   const rows = Array.from({ length: numberOfIterations }).map((_, index) =>
     createDataIteration(data, index)
   );
-  console.log(`createData`, flatten(rows));
+  // console.log(`createData`, flatten(rows));
   return flatten(rows);
 }
 
-const sampleProducts = createData(_sampleProducts);
+const sampleProducts = createData(_sampleProducts, 2);
 
 export { sampleProducts, _sampleProducts };

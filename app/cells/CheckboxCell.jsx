@@ -1,16 +1,21 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const CheckboxCell = (props) => {
-  const { checkedField, dataItem, dataItemKey, onRowChecked } = props;
-  const _id = dataItem[dataItemKey];
-  const isChecked = dataItem[checkedField];
-  const key = `${_id}-row-checkbox`;
-  const [isChecked, setIsChecked] = useState(dataItem[checkedField]);
+  const { checkedField, dataItem, dataItemKey, onRowChecked, render } = props;
+  const { [dataItemKey]: _id, [checkedField]: checked } = dataItem;
+  const [isChecked, setIsChecked] = useState(checked);
+
+  useEffect(() => {
+    if (checked !== isChecked) {
+      setIsChecked(checked);
+    }
+  }, checked);
 
   const handleChecked = () => {
     const newIsChecked = !isChecked;
-    onRowChecked(_id, newIsChecked);
+    // dataItem[field] = newIsChecked;
     setIsChecked(newIsChecked);
+    onRowChecked(dataItem, newIsChecked);
   };
 
   const defaultRendering = () => (
@@ -18,7 +23,7 @@ const CheckboxCell = (props) => {
       <input
         type="checkbox"
         className="k-checkbox"
-        key={key}
+        key={`${_id}-row-checkbox`}
         onChange={() => handleChecked()}
         id={_id}
         defaultChecked={isChecked}

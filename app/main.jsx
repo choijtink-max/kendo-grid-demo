@@ -5,6 +5,7 @@ import {
   GridColumn as Column,
   GridToolbar,
 } from '@progress/kendo-react-grid';
+import isNil from 'lodash/isNil';
 
 import ActionCommandCell from './cells/ActionCommandCell';
 import CheckboxCell from './cells/CheckboxCell';
@@ -27,27 +28,23 @@ import {
   isItemEqualToDataItemCallback,
 } from './services';
 
-
-
 const App = () => {
   const [data, setData] = useState(getItems());
   const [dataBeforeSave, setDataBeforeSave] = useState();
+  const [isAllChecked, setIsAllChecked] = useState(false);
 
   const customCheckboxHeaderCell = (props) => (
-    <CheckboxHeaderCell
-      {...props}
-      dataItemKey={dataItemKey}
-    />
-  )
+    <CheckboxHeaderCell {...props} dataItemKey={dataItemKey} />
+  );
 
-  const customCheckboxCell = (props) => (
+  const CustomCheckboxCell = (props) => (
     <CheckboxCell
       {...props}
       checkedField={checkedField}
       dataItemKey={dataItemKey}
-      dataItemKey={dataItemKey}
+      onRowChecked={onRowChecked}
     />
-  )
+  );
 
   const CommandCell = (props) => (
     <ActionCommandCell
@@ -82,6 +79,21 @@ const App = () => {
       exitEdit={exitEdit}
     />
   );
+
+  const onRowChecked = (dataItem, newValue) => {
+    if (!isNil(dataBeforeSave)) {
+      exitEdit();
+    }
+
+    const rowIndex = data.findIndex(isItemEqualToDataItemCallback(dataItem));
+    const newData = [...data];
+    newData[rowIndex][checkedField] = newValue;
+
+    const checkedAll = isEveryRowChecked(newData);
+    // onCheckAllClick(datasetInstanceId, controlId, checkedAll);
+    setIsAllChecked(checkedAll);
+    setData(newData);
+  };
 
   /**
    * Modify the data in the store, db etc
@@ -274,7 +286,6 @@ const App = () => {
         </button>
       </GridToolbar>
       <Column
-        key={checkedField}
         width="50px"
         field={checkedField}
         className="selection"
@@ -282,7 +293,7 @@ const App = () => {
         reorderable={false}
         orderIndex={0}
         resizable={false}
-        column={}
+        cell={CustomCheckboxCell}
       />
 
       {columns.map((column) => (

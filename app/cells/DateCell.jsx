@@ -13,9 +13,9 @@ const DateCell = (props) => {
   const value = field && dataItem[field] ? dataItem[field] : '19990101';
 
   useEffect(() => {
-    console.log(`[DateCell] mount`);
+    // console.log(`[DateCell] mount`);
     return () => {
-      console.log(`[DateCell] unmount`);
+      // console.log(`[DateCell] unmount`);
     };
   }, []);
 
