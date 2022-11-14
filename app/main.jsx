@@ -15,6 +15,7 @@ import {
   dataItemKey,
   deleteItem,
   editField,
+  getItems,
   isItemEqualToDataItem,
   insertItem,
   updateItem,
@@ -23,7 +24,7 @@ import {
 } from './services';
 
 const App = () => {
-  const [data, setData] = useState(sampleProducts);
+  const [data, setData] = useState(getItems());
   const [dataBeforeSave, setDataBeforeSave] = useState();
 
   const CommandCell = (props) => (

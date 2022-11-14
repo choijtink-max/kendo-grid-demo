@@ -1,6 +1,11 @@
-export const sampleProducts = [
+import flatten from 'lodash/flatten';
+import { dataItemKey, editField } from './services';
+
+// const dataItemKey = 'ProductID';
+
+const _sampleProducts = [
   {
-    ProductID: 1,
+    [dataItemKey]: 1,
     ProductName: 'Chai',
     SupplierID: 1,
     CategoryID: 1,
@@ -19,7 +24,7 @@ export const sampleProducts = [
     DeliveredOn: new Date(1996, 8, 29),
   },
   {
-    ProductID: 2,
+    [dataItemKey]: 2,
     ProductName: 'Chang',
     SupplierID: 1,
     CategoryID: 1,
@@ -38,7 +43,7 @@ export const sampleProducts = [
     DeliveredOn: new Date(1996, 7, 18),
   },
   {
-    ProductID: 3,
+    [dataItemKey]: 3,
     ProductName: 'Aniseed Syrup',
     SupplierID: 1,
     CategoryID: 2,
@@ -57,7 +62,7 @@ export const sampleProducts = [
     DeliveredOn: new Date(1996, 9, 1),
   },
   {
-    ProductID: 4,
+    [dataItemKey]: 4,
     ProductName: "Chef Anton's Cajun Seasoning",
     SupplierID: 2,
     CategoryID: 2,
@@ -76,7 +81,7 @@ export const sampleProducts = [
     DeliveredOn: new Date(1996, 9, 29),
   },
   {
-    ProductID: 5,
+    [dataItemKey]: 5,
     ProductName: "Chef Anton's Gumbo Mix",
     SupplierID: 2,
     CategoryID: 2,
@@ -95,7 +100,7 @@ export const sampleProducts = [
     DeliveredOn: new Date(1996, 7, 25),
   },
   {
-    ProductID: 6,
+    [dataItemKey]: 6,
     ProductName: "Grandma's Boysenberry Spread",
     SupplierID: 3,
     CategoryID: 2,
@@ -114,7 +119,7 @@ export const sampleProducts = [
     DeliveredOn: new Date(1996, 9, 25),
   },
   {
-    ProductID: 7,
+    [dataItemKey]: 7,
     ProductName: "Uncle Bob's Organic Dried Pears",
     SupplierID: 3,
     CategoryID: 7,
@@ -133,7 +138,7 @@ export const sampleProducts = [
     DeliveredOn: new Date(1996, 7, 25),
   },
   {
-    ProductID: 8,
+    [dataItemKey]: 8,
     ProductName: 'Northwoods Cranberry Sauce',
     SupplierID: 3,
     CategoryID: 2,
@@ -152,7 +157,7 @@ export const sampleProducts = [
     DeliveredOn: new Date(1996, 11, 5),
   },
   {
-    ProductID: 9,
+    [dataItemKey]: 9,
     ProductName: 'Mishi Kobe Niku',
     SupplierID: 4,
     CategoryID: 6,
@@ -171,7 +176,7 @@ export const sampleProducts = [
     DeliveredOn: new Date(1997, 1, 27),
   },
   {
-    ProductID: 10,
+    [dataItemKey]: 10,
     ProductName: 'Ikura',
     SupplierID: 4,
     CategoryID: 8,
@@ -190,3 +195,27 @@ export const sampleProducts = [
     DeliveredOn: new Date(1997, 1, 27),
   },
 ];
+
+function createDataIteration(rows, index = 0) {
+  return rows.map((row) => {
+    const newProductId = row[dataItemKey] + index * 10;
+    console.log(`createDataIteration`, { row, newProductId });
+    return {
+      ...row,
+      [dataItemKey]: newProductId,
+    };
+  });
+}
+
+function createData(data, numberOfIterations = 10) {
+  console.log(`createData`, { data });
+  const rows = Array.from({ length: numberOfIterations }).map((_, index) =>
+    createDataIteration(data, index)
+  );
+  console.log(`createData`, flatten(rows));
+  return flatten(rows);
+}
+
+const sampleProducts = createData(_sampleProducts);
+
+export { sampleProducts, _sampleProducts };
