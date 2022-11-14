@@ -11,6 +11,7 @@ import CellRender from './renderers/CellRenderer';
 import { columns, getFirstEditableColumn } from './columns';
 import RowRender from './renderers/RowRenderer';
 import {
+  checkedField,
   createNewItem,
   dataItemKey,
   deleteItem,
@@ -251,10 +252,25 @@ const App = () => {
           Add new
         </button>
       </GridToolbar>
+      <Column
+        key={this.checkedField}
+        width="50px"
+        field={this.checkedField}
+        className="selection"
+        minResizableWidth={40}
+        reorderable={false}
+        orderIndex={0}
+      />
+      
       {columns.map((column) => (
         <Column {...column} />
       ))}
-      <Column cell={CommandCell} width="92px" />
+      <Column
+        editable={false}
+        cell={CommandCell}
+        resizable={false}
+        width="100px"
+      />
     </Grid>
   );
 };

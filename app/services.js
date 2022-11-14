@@ -2,8 +2,9 @@ import { sampleProducts } from './sample-products';
 
 const initialData = [...sampleProducts];
 
+export const checkedField = '_checked';
 export const dataItemKey = 'ProductID';
-export const editField = 'inEdit';
+export const editField = '_editField';
 
 /**
  * @param {Object} a - The first item to check.

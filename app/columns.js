@@ -6,7 +6,10 @@ export function createColumn(field, title, width, props = {}) {
 }
 
 export const columns = [
-  createColumn('ProductID', 'Id', 40, { editable: false }),
+  createColumn('ProductID', 'Id', 40, {
+    editable: false,
+    resizable: false,
+  }),
   createColumn('ProductName', 'Product Name', 150),
   createColumn('FirstOrderedOn', 'First Ordered', 140, {
     editor: 'date',
@@ -15,6 +18,7 @@ export const columns = [
   createColumn('UnitsInStock', 'Units', 100, { editor: 'numeric' }),
   createColumn('Discontinued', 'Discontinued', 120, { cell: DropDownCell }),
   createColumn('DeliveredOn', 'Delivered On', 140, { cell: DateCell }),
+  // createColumn(undefined, undefined, 92, { cell: CommandCell, resizable }),
 ];
 
 export function getFirstEditableColumn(columnsToCheck = columns) {
