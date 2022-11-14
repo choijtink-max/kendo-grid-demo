@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as ReactDOM from 'react-dom';
 import {
   Grid,
@@ -17,7 +17,9 @@ import RowRender from './renderers/RowRenderer';
 import {
   createNewItem,
   deleteItem,
+  deleteItems,
   getItems,
+  getCheckedItems,
   isEveryRowChecked,
   isItemEqualToDataItem,
   insertItem,
@@ -29,29 +31,36 @@ import {
 const App = () => {
   const [data, setData] = useState(getItems());
   const [dataBeforeSave, setDataBeforeSave] = useState();
-  const [isAllChecked, setIsAllChecked] = useState(false);
+  const [isItemChecked, setIsItemChecked] = useState(false);
+  const [checkedAll, setCheckedAll] = useState(false);
 
   const customCheckboxHeaderCell = (props) => (
     <CheckboxHeaderCell
       {...props}
       controlId="controlId"
-      checkedAll={isAllChecked}
+      checkedAll={checkedAll}
       dataItemKey={dataItemKey}
       handleSetCheckedAll={handleSetCheckedAll}
     />
   );
 
   const handleSetCheckedAll = () => {
-    if (isAllChecked) {
+    if (checkedAll) {
+      // Change this to isAllChecked
       const newData = setFieldForEachItem(data, checkedField, false);
-      setIsAllChecked(false);
+      setCheckedAll(false);
       setData(newData);
     } else {
       const newData = setFieldForEachItem(data, checkedField, true);
-      setIsAllChecked(true);
+      setCheckedAll(true);
       setData(newData);
     }
   };
+
+  useEffect(() => {
+    const checkedItem = data.find((row) => row[checkedField]);
+    setIsItemChecked(!isNil(checkedItem));
+  }, [data]);
 
   const CustomCheckboxCell = (props) => (
     <CheckboxCell
@@ -107,7 +116,7 @@ const App = () => {
 
     const checkedAll = isEveryRowChecked(data);
     // onCheckAllClick(datasetInstanceId, controlId, checkedAll);
-    setIsAllChecked(checkedAll);
+    setCheckedAll(checkedAll);
     setData(newData);
   };
 
@@ -213,6 +222,12 @@ const App = () => {
     setData([newDataItem, ...data]);
   };
 
+  const removeChecked = () => {
+    const checkedItems = getCheckedItems(data, checkedField);
+    const newData = deleteItems(checkedItems, data, checkedField);
+    setData(newData);
+  };
+
   /**
    * @param {number} editedLineIndex - The index of line that is being edited.
    * @param {number} nextColumnIndex - The index of the next column to navigate to.
@@ -299,6 +314,14 @@ const App = () => {
           onClick={addNew}
         >
           Add new
+        </button>
+        <button
+          disabled={!isItemChecked}
+          title="Remove"
+          className="k-button k-button-md k-rounded-md k-button-solid k-button-solid"
+          onClick={removeChecked}
+        >
+          Remove
         </button>
       </GridToolbar>
       <Column

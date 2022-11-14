@@ -1,12 +1,21 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import get from 'lodash/get';
 import { styling } from '../constants';
+
+function isItemChecked(dataItem, checkedField) {
+  return Boolean(get(dataItem, checkedField, false) == true);
+}
 
 const CheckboxCell = (props) => {
   const { ariaColumnIndex, dataItem, columnIndex, render } = props;
   const { checkedField, dataItemKey, onRowChecked } = props;
   const _id = dataItem[dataItemKey] || '';
-  const checked = dataItem[checkedField] || false;
-  const [isChecked, setIsChecked] = useState(checked);
+  const checked = isItemChecked(dataItem, checkedField);
+  const [isChecked, setIsChecked] = useState(isItemChecked(dataItem, checkedField));
+
+  useEffect(() => {
+
+  }, [dataItem, checkedField])
 
   useEffect(() => {
     if (checked !== isChecked) {

@@ -85,6 +85,11 @@ export const deleteItem = (item, data) => {
   return data;
 };
 
+export const deleteItems = (items, data, key = dataItemKey) => {
+  const idsFromItesToRemove = items.map(item => item[key]);
+  return data.filter((item) => !idsFromItesToRemove.includes(item[key]));
+}
+
 /**
  * @param {Array<Object>} data - The grid data.
  * @returns {Object} The newly created item.
@@ -118,4 +123,12 @@ export function setFieldForEachItem(data, field, value) {
 export function isEveryRowChecked(data) {
   const checkedRows = data.filter((item) => item[checkedField]);
   return checkedRows.length === data.length;
+}
+
+export function getItemsHavingCheckedSetTo(expectedValue, data, checkedKey = checkedField) {
+  return data.filter(item => item[checkedKey] === true)
+}
+
+export function getCheckedItems(data, checkedKey = checkedField) {
+  return data.filter(item => item[checkedKey] === true)
 }
