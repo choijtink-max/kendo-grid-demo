@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { DropDownList } from '@progress/kendo-react-dropdowns';
-import { editField } from '../services';
 
 const DropDownCell = (props) => {
-  const { dataItem, field = '', onChange, render } = props;
+  const { dataItem, editField, field = '', onChange, render } = props;
   const localizedData = [
     {
       text: 'yes',

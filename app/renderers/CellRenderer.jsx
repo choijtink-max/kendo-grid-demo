@@ -1,7 +1,4 @@
 import * as React from 'react';
-import CheckboxCell from '../cells/CheckboxCell';
-import { checkedField } from '../constants';
-import { editField } from '../services';
 
 /**
  * Responsible for rendering each Cell and adding properties to it.
@@ -14,10 +11,14 @@ const ESC_KEY = 27;
 
 const CellRender = (props) => {
   const { cancel, enterEdit, focusNextCell, originalProps, td } = props;
-  const { cell, dataItem, field } = originalProps;
+  const { checkedField, dataItemKey, editField } = props;
+  const { dataItem, field } = originalProps;
   const inEditField = dataItem[editField];
 
   const additionalProps = {
+    checkedField,
+    dataItemKey,
+    editField,
     onKeyDown: (event) => {
       const { keyCode } = event;
       if (keyCode === TAB_KEY || keyCode === ENTER_KEY) {
@@ -55,7 +56,7 @@ const CellRender = (props) => {
           return;
         }
         if (input?.type === 'checkbox') {
-          input.focus();
+          // input.focus();
         } else {
           input.select();
         }
@@ -72,7 +73,8 @@ const CellRender = (props) => {
       },
     });
   }
-  const clonedProps = { ...td.props, ...additionalProps };
+  const gridProps = { checkedField, dataItemKey, editField };
+  const clonedProps = { ...td.props, ...additionalProps, ...gridProps };
   const childNodes = td.props.children;
   return React.cloneElement(td, clonedProps, childNodes);
 };

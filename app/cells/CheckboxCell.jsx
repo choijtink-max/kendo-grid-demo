@@ -10,27 +10,15 @@ const CheckboxCell = (props) => {
   const { ariaColumnIndex, dataItem, columnIndex, render } = props;
   const { checkedField, dataItemKey, onRowChecked } = props;
   const _id = dataItem[dataItemKey] || '';
-  const [isChecked, setIsChecked] = useState(
-    isItemChecked(dataItem, checkedField)
-  );
-
-  // useEffect(() => {
-
-  // }, [dataItem, checkedField])
-
-  useEffect(() => {
-    const checked = isItemChecked(dataItem, checkedField);
-    if (checked !== isChecked) {
-      setIsChecked(checked);
-    }
-  }, [dataItem[checkedField]]);
+  const value = dataItem[checkedField];
+  const [isChecked, setIsChecked] = useState(value);
 
   const handleChecked = useCallback(() => {
     const newIsChecked = !isChecked;
-    // dataItem[field] = newIsChecked;
+    dataItem[checkedField] = newIsChecked;
     setIsChecked(newIsChecked);
     onRowChecked(dataItem, newIsChecked);
-  }, [dataItem, isChecked]);
+  }, [checkedField, dataItem, isChecked]);
 
   const defaultRendering = (
     <td aria-colindex={ariaColumnIndex} data-grid-col-index={columnIndex}>

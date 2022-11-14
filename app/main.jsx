@@ -40,9 +40,8 @@ const App = () => {
   const customCheckboxHeaderCell = (props) => (
     <CheckboxHeaderCell
       {...props}
-      controlId="controlId"
       checkedAll={checkedAll}
-      dataItemKey={dataItemKey}
+      controlId="controlId"
       handleSetCheckedAll={handleSetCheckedAll}
     />
   );
@@ -68,7 +67,6 @@ const App = () => {
   const CustomCheckboxCell = (props) => (
     <CheckboxCell
       {...props}
-      checkedField={checkedField}
       dataItemKey={dataItemKey}
       onRowChecked={onRowChecked}
     />
@@ -79,10 +77,8 @@ const App = () => {
       {...props}
       add={add}
       cancel={cancel}
-      dataItemKey={dataItemKey}
       discard={discard}
       edit={enterEdit}
-      editField={editField}
       remove={remove}
       update={update}
     />
@@ -90,13 +86,15 @@ const App = () => {
 
   const customCellRender = (td, props) => (
     <CellRender
-      originalProps={props}
-      td={td}
       cancel={cancel}
+      checkedField={checkedField}
+      dataItemKey={dataItemKey}
       editField={editField}
       enterEdit={enterEdit}
       exitEdit={exitEdit}
       focusNextCell={focusNextCell}
+      originalProps={props}
+      td={td}
     />
   );
 
@@ -122,6 +120,17 @@ const App = () => {
     // onCheckAllClick(datasetInstanceId, controlId, checkedAll);
     setCheckedAll(checkedAll);
     setData(newData);
+    console.log('[onRowChecked]', {
+      dataBeforeSave,
+      isNil: isNil(dataBeforeSave),
+      newData,
+      rowIndex,
+      newData,
+      checkedAll,
+      dataItem,
+      newValue,
+      row: newData[rowIndex],
+    });
   };
 
   /**
@@ -243,6 +252,13 @@ const App = () => {
     // navigate to the next editable column.
     const nextColumns = columns.slice(nextColumnIndex);
     const nextColumn = getFirstEditableColumn(nextColumns);
+    const isNoEditColumnLeft = isNil(nextColumn);
+
+    if (isNoEditColumnLeft) {
+      focusOnNextLine(editedLineIndex, nextLine);
+      return;
+    }
+
     newData[editedLineIndex][editField] = nextColumn?.field;
     setData(newData);
   };
@@ -253,12 +269,9 @@ const App = () => {
    * @param {Array<Object>} newData - The new grid data.
    * @param {string} field - The field from the currently visible grid cell.
    */
-  const focusOnNextLine = (editedLineIndex, nextLineIndex, newData, field) => {
+  const focusOnNextLine = (editedLineIndex, newData) => {
+    const nextLineIndex = editedLineIndex + 1;
     const isLastLine = nextLineIndex === data.length;
-
-    const columnIndex = columns.findIndex((column) => column.field === field);
-    const nextColumnIndex = columnIndex + 1;
-    const isLastColumn = nextColumnIndex === columns.length;
 
     if (isLastLine) {
       exitEdit();
@@ -286,14 +299,13 @@ const App = () => {
       return;
     }
 
-    const nextLineIndex = editedLineIndex + 1;
     const columnIndex = columns.findIndex((column) => column.field === field);
     const nextColumnIndex = columnIndex + 1;
     const isLastColumn = nextColumnIndex === columns.length;
     const newData = [...data];
 
     if (isLastColumn) {
-      focusOnNextLine(editedLineIndex, nextLineIndex, newData, field);
+      focusOnNextLine(editedLineIndex, newData, field);
     } else {
       focusOnNextCell(editedLineIndex, nextColumnIndex, newData);
     }
