@@ -6,9 +6,8 @@ import { dataItemKey } from '../constants';
 const TextCell = (props) => {
   const { ariaColumnIndex, columnIndex } = props;
   const { dataItem, field, render } = props;
-  const [key] = useState(`${dataItem[dataItemKey]}.${field}`);
+  const key = `${dataItem[dataItemKey]}.${field}`;
   const value = get(dataItem, field);
-  // const [value, setValue] = useState(dataItem[field]);
   useLogMountBehaviour('TextCell');
 
   const defaultRendering = (

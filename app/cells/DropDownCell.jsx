@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { DropDownList } from '@progress/kendo-react-dropdowns';
 import { dataItemKey, editField } from '../constants';
 import { useLogMountBehaviour } from '../logger';

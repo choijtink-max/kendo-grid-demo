@@ -13,12 +13,16 @@ const ActionCommandCell = (props) => {
   const { ariaColumnIndex, columnIndex } = props;
   const { add, dataItem, dataItemKey, discard, editField, render } = props;
   const [inEdit, setInEdit] = useState(dataItem[editField]);
-  const [isNewItem, setIsNewItem] = useState(getIsNewItem(dataItem, dataItemKey));
+  const [isNewItem, setIsNewItem] = useState(
+    getIsNewItem(dataItem, dataItemKey)
+  );
   useLogMountCounter();
 
   useEffect(() => {
     const newInEdit = dataItem[editField];
     const newIsNewItem = getIsNewItem(dataItem, dataItemKey);
+    if (newInEdit !== inEdit) setInEdit(newInEdit);
+    if (newIsNewItem !== isNewItem) setIsNewItem(newInEdit);
   }, [dataItem]);
 
   const defaultRendering = (

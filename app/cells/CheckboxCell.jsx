@@ -23,10 +23,10 @@ const CheckboxCell = (props) => {
   }, [checkedField, dataItem, isChecked]);
 
   const defaultRendering = (
-    <td 
-    aria-colindex={ariaColumnIndex} 
-    data-grid-col-index={columnIndex}
-    key={_id}
+    <td
+      aria-colindex={ariaColumnIndex}
+      data-grid-col-index={columnIndex}
+      key={_id}
     >
       <input
         style={styling.checkbox}

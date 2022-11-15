@@ -60,7 +60,7 @@ const App = () => {
     setIsItemChecked(!isNil(checkedItem));
   }, [data]);
 
-  const onRowChecked = (dataItem, newValue) => {
+  const onRowChecked = useCallback((dataItem, newValue) => {
     if (!isNil(dataBeforeSave)) {
       exitEdit();
     }
@@ -73,7 +73,7 @@ const App = () => {
     // onCheckAllClick(datasetInstanceId, controlId, checkedAll);
     setCheckedAll(checkedAll);
     setData(newData);
-  };
+  }, [data, dataBeforeSave]);
 
   /**
    * Modify the data in the store, db etc
@@ -389,7 +389,7 @@ const App = () => {
         editable={false}
         cell={customActionCommandCell}
         resizable={false}
-        width="150px"
+        width="90px"
       />
     </Grid>
   );
