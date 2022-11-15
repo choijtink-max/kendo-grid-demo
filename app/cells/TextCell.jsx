@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import get from 'lodash/get';
-import { useLogMountBehaviour } from '../logger';
+import { useLogMountBehaviour, useLogMountCounter } from '../logger';
 import { dataItemKey } from '../constants';
 
 const TextCell = (props) => {
@@ -9,6 +9,7 @@ const TextCell = (props) => {
   const key = `${dataItem[dataItemKey]}.${field}`;
   const value = get(dataItem, field);
   useLogMountBehaviour('TextCell');
+  useLogMountCounter();
 
   const defaultRendering = (
     <td

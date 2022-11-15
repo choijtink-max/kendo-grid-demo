@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { DropDownList } from '@progress/kendo-react-dropdowns';
 import { dataItemKey, editField } from '../constants';
-import { useLogMountBehaviour } from '../logger';
+import { useLogMountBehaviour, useLogMountCounter } from '../logger';
 
 const localizedData = [
   { text: 'yes', value: true },
@@ -14,6 +14,7 @@ const DropDownCell = (props) => {
   const { dataItem, field, onChange, render } = props;
   const [key] = useState(`${dataItem[dataItemKey]}.${field}`);
   useLogMountBehaviour('DropDownCell');
+  useLogMountCounter();
 
   const handleChange = (e) => {
     if (onChange) {

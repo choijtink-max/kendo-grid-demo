@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { DatePicker } from '@progress/kendo-react-dateinputs';
 import isFunction from 'lodash/isFunction';
 import { editField } from '../constants';
+import { useLogMountBehaviour, useLogMountCounter } from '../logger';
 
 /**
  * This is a own made GridCell which is used for Dates.
@@ -13,6 +14,7 @@ const DateCell = (props) => {
   const isInEdit = field === dataItem[editField];
   const value = field && dataItem[field] ? dataItem[field] : '19990101';
   useLogMountBehaviour('DateCell');
+  useLogMountCounter();
 
   const onChange = (e) => {
     if (props.onChange) {

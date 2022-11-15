@@ -1,13 +1,13 @@
 import { dataItemKey, styling } from '../constants';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useLogMountBehaviour } from '../logger';
+import { useLogMountBehaviour, useLogMountCounter } from '../logger';
 
 const CheckboxCell2 = (props) => {
   const { ariaColumnIndex, columnIndex, onChange } = props;
   const { dataItem, field, render } = props;
   const checkboxId = dataItem[dataItemKey] || '';
   const [isChecked, setIsChecked] = useState(dataItem[field]);
-  // useLogMountCounter();
+  useLogMountCounter();
   useLogMountBehaviour('CheckboxCell2');
 
   useEffect(() => {
@@ -29,8 +29,7 @@ const CheckboxCell2 = (props) => {
           dataIndex: 0,
           dataItem,
           field,
-          syntheticEvent: e.syntheticEvent,
-          value: e.target.value.value,
+          value: newIsChecked,
         });
       }
     },
