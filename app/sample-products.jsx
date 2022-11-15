@@ -214,6 +214,6 @@ function createData(data, numberOfIterations = 10) {
   return flatten(rows);
 }
 
-const sampleProducts = createData(_sampleProducts, 2);
+const sampleProducts = createData(_sampleProducts, 1);
 
 export { sampleProducts, _sampleProducts };

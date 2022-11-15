@@ -7,7 +7,7 @@ import * as React from 'react';
 
 const ActionCommandCell = (props) => {
   // const { add, cancel, discard, edit, update } = props;
-  const { add, dataItem, dataItemKey, discard, editField, render, remove } = props;
+  const { add, dataItem, dataItemKey, discard, editField, render } = props;
   const inEdit = dataItem[editField];
   const isNewItem = dataItem[dataItemKey] === undefined;
 

@@ -68,17 +68,6 @@ const App = () => {
     // onCheckAllClick(datasetInstanceId, controlId, checkedAll);
     setCheckedAll(checkedAll);
     setData(newData);
-    console.log('[onRowChecked]', {
-      dataBeforeSave,
-      isNil: isNil(dataBeforeSave),
-      newData,
-      rowIndex,
-      newData,
-      checkedAll,
-      dataItem,
-      newValue,
-      row: newData[rowIndex],
-    });
   };
 
   /**
@@ -112,7 +101,7 @@ const App = () => {
    * Local state operations
    * @param {Object} dataItem - The dataItem to update.
    */
-  const discard = (dataItem) => {
+  const discard = () => {
     const newData = [...data];
     newData.splice(0, 1);
     setData(newData);
@@ -139,10 +128,6 @@ const App = () => {
    */
   const enterEdit = (dataItem, field) => {
     setDataBeforeSave({ ...dataItem });
-    // const newData = data.map((item) => ({
-    //   ...item,
-    //   [editField]: isItemEqualToDataItem(item, dataItem) ? field : undefined,
-    // }));
     const newData = setFieldForEachItem(data, editField, (item) =>
       isItemEqualToDataItem(item, dataItem) ? field : undefined
     );
@@ -153,10 +138,6 @@ const App = () => {
    *
    */
   const exitEdit = () => {
-    // const newData = data.map((item) => ({
-    //   ...item,
-    //   [editField]: undefined,
-    // }));
     const newData = setFieldForEachItem(data, editField, undefined);
     setData(newData);
   };
@@ -281,11 +262,11 @@ const App = () => {
     <ActionCommandCell
       {...props}
       add={add}
-      cancel={cancel}
+      dataItemKey={dataItemKey}
       discard={discard}
       edit={enterEdit}
+      editField={editField}
       remove={remove}
-      update={update}
     />
   );
 
@@ -305,10 +286,10 @@ const App = () => {
 
   const customRowRender = (tr, props) => (
     <RowRender
-      originalProps={props}
-      tr={tr}
       editField={editField}
       exitEdit={exitEdit}
+      originalProps={props}
+      tr={tr}
     />
   );
 
@@ -358,7 +339,7 @@ const App = () => {
         editable={false}
         cell={customActionCommandCell}
         resizable={false}
-        width="120px"
+        width="150px"
       />
     </Grid>
   );

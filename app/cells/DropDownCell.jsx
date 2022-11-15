@@ -2,22 +2,14 @@ import * as React from 'react';
 import { DropDownList } from '@progress/kendo-react-dropdowns';
 import { editField } from '../constants';
 
+const localizedData = [
+  { text: 'yes', value: true },
+  { text: 'no', value: false },
+  { text: '(empty)', value: null },
+];
+
 const DropDownCell = (props) => {
-  const { dataItem, field = '', onChange, render } = props;
-  const localizedData = [
-    {
-      text: 'yes',
-      value: true,
-    },
-    {
-      text: 'no',
-      value: false,
-    },
-    {
-      text: '(empty)',
-      value: null,
-    },
-  ];
+  const { dataItem, field, onChange, render } = props;
 
   const handleChange = (e) => {
     if (onChange) {
