@@ -13,23 +13,13 @@ const ActionCommandCell = (props) => {
   const { ariaColumnIndex, columnIndex } = props;
   const { add, dataItem, dataItemKey, discard, editField, render } = props;
   const [inEdit, setInEdit] = useState(dataItem[editField]);
-  const [isNewItem, setIsNewItem] = useState(
-    getIsNewItem(dataItem, dataItemKey)
-  );
+  const [isNewItem, setIsNewItem] = useState(getIsNewItem(dataItem, dataItemKey));
+  useLogMountBehaviour();
 
   useEffect(() => {
     const newInEdit = dataItem[editField];
     const newIsNewItem = getIsNewItem(dataItem, dataItemKey);
   }, [dataItem]);
-
-  useEffect(() => {
-    logCellMount();
-    // console.log(`[ActionCommandCell] mounted`);
-    return () => {
-      logCellUnmount();
-      // console.log(`[ActionCommandCell] unmounted`);
-    };
-  }, []);
 
   const defaultRendering = (
     <td

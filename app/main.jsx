@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import * as ReactDOM from 'react-dom';
 import {
   Grid,
@@ -12,7 +12,7 @@ import isNil from 'lodash/isNil';
 import ActionCommandCell from './cells/ActionCommandCell';
 import CheckboxCell from './cells/CheckboxCell';
 import CheckboxHeaderCell from './header-cells/CheckboxHeaderCell';
-import { checkedField, dataItemKey, editField } from './constants';
+import { checkedField, dataItemKey, editField, styling } from './constants';
 import { columns, getFirstEditableColumn } from './columns';
 import CellRender from './renderers/CellRenderer';
 import RowRender from './renderers/RowRenderer';
@@ -33,6 +33,7 @@ import {
 } from './services';
 import DropDownCell from './cells/DropDownCell';
 import TextCell from './cells/TextCell';
+import useLogMountBehaviour from './logger';
 
 const App = () => {
   const [data, setData] = useState(getItems());
@@ -253,6 +254,49 @@ const App = () => {
     />
   );
 
+  const CheckboxCellInternal = (props) => {
+    const { ariaColumnIndex, dataItem, columnIndex, render } = props;
+    const checkboxId = dataItem[dataItemKey] || '';
+    const [isChecked, setIsChecked] = useState(dataItem[checkedField]);
+
+    useEffect(() => {
+      console.log(`[CheckboxCell] mounted`);
+      return () => {
+        console.log(`[CheckboxCell] unmounted`);
+      };
+    }, []);
+
+    const handleChecked = useCallback(() => {
+      const newIsChecked = !isChecked;
+      dataItem[checkedField] = newIsChecked;
+      setIsChecked(newIsChecked);
+      // onRowChecked(dataItem, newIsChecked);
+    }, [dataItem, isChecked]);
+
+    const defaultRendering = (
+      <td
+        aria-colindex={ariaColumnIndex}
+        data-grid-col-index={columnIndex}
+        key={checkboxId}
+      >
+        <input
+          style={styling.checkbox}
+          type="checkbox"
+          className="k-checkbox"
+          key={`${checkboxId}-row-checkbox`}
+          onChange={() => handleChecked()}
+          id={checkboxId}
+          defaultChecked={isChecked}
+        />
+        <label className="k-checkbox-label" htmlFor={checkboxId} />
+      </td>
+    );
+
+    // We call the render function in here instead of return the
+    // defaultRendering, so the CellRenderer is still getting called.
+    return render?.call(undefined, defaultRendering, props);
+  };
+
   const customCheckboxCell = (props) => (
     <CheckboxCell
       {...props}
@@ -331,7 +375,7 @@ const App = () => {
         orderIndex={0}
         resizable={false}
         headerCell={customCheckboxHeaderCell}
-        cell={customCheckboxCell}
+        cell={CheckboxCellInternal}
       />
       {columns
         .filter((column) => !get(column, 'hidden', false))

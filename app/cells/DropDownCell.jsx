@@ -15,9 +15,9 @@ const DropDownCell = (props) => {
   const [key] = useState(`${dataItem[dataItemKey]}.${field}`);
 
   useEffect(() => {
-    logCellMount();
+    console.log(`[DropDownCell] mounted`);
     return () => {
-      logCellUnmount();
+      console.log(`[DropDownCell] unmounted`);
     };
   }, []);
 
