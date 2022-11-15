@@ -1,6 +1,7 @@
 import checkedField from './constants';
 import DateCell from './cells/DateCell';
 import DropDownCell from './cells/DropDownCell';
+import TextCell from './cells/TextCell';
 
 export function createColumn(field, title, width, props = {}) {
   return { field, title, width: `${width}px`, ...props };
@@ -26,7 +27,7 @@ export const columns = [
   }),
   createColumn('UnitsInStock', 'Units', 100, { editor: 'numeric' }),
   createColumn('Discontinued', 'Discontinued', 120, { cell: DropDownCell }),
-  createColumn('DeliveredOn', 'Delivered On', 140, { cell: DateCell }),
+  // createColumn('DeliveredOn', 'Delivered On', 140, { cell: DateCell }),
   // createColumn(undefined, undefined, 92, { cell: CommandCell, resizable }),
 ];
 

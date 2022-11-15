@@ -5,6 +5,7 @@ import {
   GridColumn as Column,
   GridToolbar,
 } from '@progress/kendo-react-grid';
+import cloneDeep from 'lodash/cloneDeep';
 import get from 'lodash/get';
 import isNil from 'lodash/isNil';
 
@@ -30,6 +31,8 @@ import {
   isItemEqualToDataItemCallback,
   setFieldForEachItem,
 } from './services';
+import DropDownCell from './cells/DropDownCell';
+import TextCell from './cells/TextCell';
 
 const App = () => {
   const [data, setData] = useState(getItems());
@@ -295,7 +298,7 @@ const App = () => {
 
   return (
     <Grid
-      data={data}
+      data={cloneDeep(data)}
       onItemChange={itemChange}
       cellRender={customCellRender}
       rowRender={customRowRender}
@@ -335,6 +338,13 @@ const App = () => {
         .map((column) => (
           <Column {...column} />
         ))}
+      <Column
+        field="Category.CategoryName"
+        title="CategoryName"
+        width="120px"
+        cell={TextCell}
+        editable={false}
+      />
       <Column
         editable={false}
         cell={customActionCommandCell}
