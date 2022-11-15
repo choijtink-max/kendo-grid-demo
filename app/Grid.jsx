@@ -266,7 +266,7 @@ const SimpleGrid = () => {
     const checkboxId = dataItem[dataItemKey] || '';
     const [isChecked, setIsChecked] = useState(dataItem[checkedField]);
     // useLogMountCounter();
-    // useLogMountBehaviour('CheckboxCellInternal');
+    useLogMountBehaviour('CheckboxCellInternal');
 
     const handleChecked = useCallback(() => {
       const newIsChecked = !isChecked;

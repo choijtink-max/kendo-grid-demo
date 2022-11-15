@@ -1,6 +1,6 @@
 import React from 'react';
 import * as ReactDOM from 'react-dom';
-import SimpleGrid from './SimpleGrid';
+import SimpleGrid from './Grid';
 
 const App = () => <SimpleGrid />;
 
