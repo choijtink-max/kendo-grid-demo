@@ -194,6 +194,13 @@ const _sampleProducts = [
   },
 ];
 
+let index = 1;
+
+function fn() {
+  console.log(`fn is called ${index} times`);
+  index += 1;
+}
+
 function createDataIteration(rows, index = 0) {
   return rows.map((row) => {
     const newProductId = row[dataItemKey] + index * 10;
@@ -201,6 +208,7 @@ function createDataIteration(rows, index = 0) {
     return {
       ...row,
       [dataItemKey]: newProductId,
+      fn: fn,
     };
   });
 }

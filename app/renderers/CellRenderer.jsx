@@ -1,4 +1,5 @@
-import * as React from 'react';
+import React from 'react';
+/* eslint-disable object-curly-newline */
 
 /**
  * Responsible for rendering each Cell and adding properties to it.
@@ -10,7 +11,7 @@ const ENTER_KEY = 13;
 const ESC_KEY = 27;
 
 const CellRender = (props) => {
-  const { cancel, enterEdit, focusNextCell, originalProps, td } = props;
+  const { cancel, enterEdit, focusNextCell, originalProps } = props;
   const { checkedField, dataItemKey, editField } = props;
   const { dataItem, field } = originalProps;
   const isEditField = dataItem[editField] === field;
@@ -46,7 +47,7 @@ const CellRender = (props) => {
     Object.assign(additionalProps, {
       ref: (td) => {
         const input = td && td.querySelector('input');
-        const activeElement = document.activeElement;
+        const { activeElement } = document;
         if (
           !input ||
           !activeElement ||
@@ -87,9 +88,9 @@ const CellRender = (props) => {
   }
 
   const gridProps = { checkedField, dataItemKey, editField };
-  const clonedProps = { ...td.props, ...additionalProps, ...gridProps };
-  const childNodes = td.props.children;
-  return React.cloneElement(td, clonedProps, childNodes);
+  const clonedProps = { ...props.td.props, ...additionalProps, ...gridProps };
+  const childNodes = props.td.props.children;
+  return React.cloneElement(props.td, clonedProps, childNodes);
 };
 
 export default CellRender;

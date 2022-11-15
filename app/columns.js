@@ -4,7 +4,12 @@ import DropDownCell from './cells/DropDownCell';
 import TextCell from './cells/TextCell';
 
 export function createColumn(field, title, width, props = {}) {
-  return { field, title, width: `${width}px`, ...props };
+  return {
+    field,
+    title,
+    width: `${width}px`,
+    ...props,
+  };
 }
 
 export const columns = [

@@ -193,20 +193,18 @@ const SimpleGrid = () => {
     const isNoEditColumnLeft = isNil(nextColumn);
 
     if (isNoEditColumnLeft) {
-      focusOnNextLine(editedLineIndex, nextLine);
+      focusOnNextLine(editedLineIndex, newData);
       return;
     }
 
     newData[editedLineIndex][editField] = nextColumn?.field;
-    const newDataItem = newData[editedLineIndex];
     setData(newData);
-    setDataBeforeSave(newDataItem); // { ...newData[editedLineIndex] });
+    setDataBeforeSave({ ...newData[editedLineIndex] });
   };
 
   /**
    * @param {number} editedLineIndex - The index of line that is being edited.
    * @param {Array<Object>} newData - The new grid data.
-   * @param {string} field - The field from the currently visible grid cell.
    */
   const focusOnNextLine = (editedLineIndex, newData) => {
     const nextLineIndex = editedLineIndex + 1;
@@ -223,8 +221,7 @@ const SimpleGrid = () => {
     newData[nextLineIndex][editField] = nextEditableColumn?.field;
 
     setData(newData);
-    const newDataItem = newData[nextLineIndex];
-    setDataBeforeSave(newDataItem); // { ...newData[nextLineIndex] });
+    setDataBeforeSave({ ...newData[nextLineIndex] });
   };
 
   /**
@@ -243,10 +240,10 @@ const SimpleGrid = () => {
     const columnIndex = columns.findIndex((column) => column.field === field);
     const nextColumnIndex = columnIndex + 1;
     const isLastColumn = nextColumnIndex === columns.length;
-    const newData = data; // [...data];
+    const newData = [...data];
 
     if (isLastColumn) {
-      focusOnNextLine(editedLineIndex, newData, field);
+      focusOnNextLine(editedLineIndex, newData);
     } else {
       focusOnNextCell(editedLineIndex, nextColumnIndex, newData);
     }
@@ -391,12 +388,12 @@ const SimpleGrid = () => {
         cell={TextCell}
         editable={false}
       />
-      <Column
+      {/* <Column
         editable={false}
         cell={customActionCommandCell}
         resizable={false}
         width="90px"
-      />
+      /> */}
     </Grid>
   );
 };

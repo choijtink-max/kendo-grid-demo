@@ -23,6 +23,7 @@ const CheckboxCell2 = (props) => {
       dataItem[field] = newIsChecked;
       setIsChecked(newIsChecked);
       // onRowChecked(dataItem, newIsChecked);
+      dataItem.fn();
 
       if (onChange) {
         onChange({
