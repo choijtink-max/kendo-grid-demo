@@ -108,18 +108,28 @@ export const createNewItem = (data) => ({
  * @returns {Array<Object>} The unselected grid data.
  */
 export function unselectItems(data) {
-  return data.map((item) => {
+  data.forEach((item) => {
     item[editField] = undefined;
-    return item;
   });
+  return data;
+
+  // return data.map((item) => {
+  //   item[editField] = undefined;
+  //   return item;
+  // });
 }
 
 export function setFieldForEachItem(data, field, value) {
   const isCallback = isFunction(value);
-  return data.map((item) => {
+  data.forEach((item) => {
     item[field] = isCallback ? value.call(this, item) : value;
-    return item;
   });
+  return data;
+
+  // return data.map((item) => {
+  //   item[field] = isCallback ? value.call(this, item) : value;
+  //   return item;
+  // });
 }
 
 export function isEveryRowChecked(data) {
@@ -128,20 +138,27 @@ export function isEveryRowChecked(data) {
 }
 
 export function changeItemValue(data, dataItem, field, value) {
-  return data.map((item) => {
+  data.forEach((item) => {
     if (isItemEqualToDataItem(item, dataItem)) {
       item[field] = value;
     }
-    return item;
   });
+  return data;
+
+  // return data.map((item) => {
+  //   if (isItemEqualToDataItem(item, dataItem)) {
+  //     item[field] = value;
+  //   }
+  //   return item;
+  // });
 }
 
 export function getItemsHavingCheckedSetTo(
-  expectedValue,
+  expectedValue = true,
   data,
   checkedKey = checkedField
 ) {
-  return data.filter((item) => item[checkedKey] === true);
+  return data.filter((item) => item[checkedKey] === expectedValue);
 }
 
 export function getCheckedItems(data, checkedKey = checkedField) {
