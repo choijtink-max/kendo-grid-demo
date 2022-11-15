@@ -11,6 +11,7 @@ import isNil from 'lodash/isNil';
 
 import ActionCommandCell from './cells/ActionCommandCell';
 import CheckboxCell from './cells/CheckboxCell';
+import CheckboxCell2 from './cells/CheckboxCell2';
 import CheckboxHeaderCell from './header-cells/CheckboxHeaderCell';
 import { checkedField, dataItemKey, editField, styling } from './constants';
 import { columns, getFirstEditableColumn } from './columns';
@@ -33,7 +34,7 @@ import {
 } from './services';
 import DropDownCell from './cells/DropDownCell';
 import TextCell from './cells/TextCell';
-import useLogMountBehaviour from './logger';
+import { useLogMountBehaviour, useLogMountCounter } from './logger';
 
 const App = () => {
   const [data, setData] = useState(getItems());
@@ -258,13 +259,8 @@ const App = () => {
     const { ariaColumnIndex, dataItem, columnIndex, render } = props;
     const checkboxId = dataItem[dataItemKey] || '';
     const [isChecked, setIsChecked] = useState(dataItem[checkedField]);
-
-    useEffect(() => {
-      console.log(`[CheckboxCell] mounted`);
-      return () => {
-        console.log(`[CheckboxCell] unmounted`);
-      };
-    }, []);
+    // useLogMountCounter();
+    // useLogMountBehaviour('CheckboxCellInternal');
 
     const handleChecked = useCallback(() => {
       const newIsChecked = !isChecked;
@@ -375,7 +371,7 @@ const App = () => {
         orderIndex={0}
         resizable={false}
         headerCell={customCheckboxHeaderCell}
-        cell={CheckboxCellInternal}
+        cell={CheckboxCell2}
       />
       {columns
         .filter((column) => !get(column, 'hidden', false))

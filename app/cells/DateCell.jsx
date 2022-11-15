@@ -12,7 +12,7 @@ const DateCell = (props) => {
   const { ariaColumnIndex, columnIndex, dataItem, field, render } = props;
   const isInEdit = field === dataItem[editField];
   const value = field && dataItem[field] ? dataItem[field] : '19990101';
-  useLogMountBehaviour();
+  useLogMountBehaviour('DateCell');
 
   const onChange = (e) => {
     if (props.onChange) {

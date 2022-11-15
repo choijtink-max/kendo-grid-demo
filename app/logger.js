@@ -7,7 +7,7 @@ let mountPrintTimeout;
 let unmountPrintTimeout;
 
 export function logCellMount() {
-  clearTimeout(mountPrintTimeout);
+  if (mountPrintTimeout) clearTimeout(mountPrintTimeout);
   mountCounter += 1;
   mountPrintTimeout = setTimeout(() => {
     console.log(`[Cell] mount | called ${mountCounter}`);
@@ -16,7 +16,7 @@ export function logCellMount() {
 }
 
 export function logCellUnmount() {
-  clearTimeout(unmountPrintTimeout);
+  if (unmountPrintTimeout) clearTimeout(unmountPrintTimeout);
   unmountCounter += 1;
   unmountPrintTimeout = setTimeout(() => {
     console.log(`[Cell] unmount | called ${unmountCounter}`);
@@ -24,7 +24,7 @@ export function logCellUnmount() {
   }, 15);
 }
 
-const useLogMountBehaviour = () => {
+export const useLogMountCounter = () => {
   useEffect(() => {
     logCellMount();
     return () => {
@@ -33,4 +33,11 @@ const useLogMountBehaviour = () => {
   }, []);
 };
 
-export default useLogMountBehaviour;
+export const useLogMountBehaviour = (ComponentName) => {
+  useEffect(() => {
+    console.log(`[${ComponentName}] mount`);
+    return () => {
+      console.log(`[${ComponentName}] unmount`);
+    };
+  }, []);
+};

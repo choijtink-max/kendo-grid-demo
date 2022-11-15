@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import get from 'lodash/get';
 import { styling } from '../constants';
-import useLogMountBehaviour from '../logger';
+import { useLogMountCounter } from '../logger';
 
 function isItemChecked(dataItem, checkedField) {
   return Boolean(get(dataItem, checkedField, false) == true);
@@ -13,7 +13,7 @@ const CheckboxCell = (props) => {
   const _id = dataItem[dataItemKey] || '';
   const value = dataItem[checkedField];
   const [isChecked, setIsChecked] = useState(value);
-  useLogMountBehaviour();
+  useLogMountCounter();
 
   const handleChecked = useCallback(() => {
     const newIsChecked = !isChecked;

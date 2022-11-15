@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import get from 'lodash/get';
-import useLogMountBehaviour, { logCellMount, logCellUnmount } from '../logger';
+import { useLogMountBehaviour } from '../logger';
 import { dataItemKey } from '../constants';
 
 const TextCell = (props) => {
@@ -9,13 +9,7 @@ const TextCell = (props) => {
   const [key] = useState(`${dataItem[dataItemKey]}.${field}`);
   const value = get(dataItem, field);
   // const [value, setValue] = useState(dataItem[field]);
-
-  useEffect(() => {
-    console.log(`[TextCell] mounted`);
-    return () => {
-      console.log(`[TextCell] unmounted`);
-    };
-  }, []);
+  useLogMountBehaviour('TextCell');
 
   const defaultRendering = (
     <td

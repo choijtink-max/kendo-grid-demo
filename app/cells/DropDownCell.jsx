@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { DropDownList } from '@progress/kendo-react-dropdowns';
 import { dataItemKey, editField } from '../constants';
-import useLogMountBehaviour, { logCellMount, logCellUnmount } from '../logger';
+import { useLogMountBehaviour } from '../logger';
 
 const localizedData = [
   { text: 'yes', value: true },
@@ -13,13 +13,7 @@ const DropDownCell = (props) => {
   const { ariaColumnIndex, columnIndex } = props;
   const { dataItem, field, onChange, render } = props;
   const [key] = useState(`${dataItem[dataItemKey]}.${field}`);
-
-  useEffect(() => {
-    console.log(`[DropDownCell] mounted`);
-    return () => {
-      console.log(`[DropDownCell] unmounted`);
-    };
-  }, []);
+  useLogMountBehaviour('DropDownCell');
 
   const handleChange = (e) => {
     if (onChange) {

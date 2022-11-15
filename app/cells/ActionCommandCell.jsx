@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import useLogMountBehaviour, { logCellMount, logCellUnmount } from '../logger';
+import { useLogMountCounter } from '../logger';
 
 /**
  * This is the last grid column that has the remove button
@@ -14,7 +14,7 @@ const ActionCommandCell = (props) => {
   const { add, dataItem, dataItemKey, discard, editField, render } = props;
   const [inEdit, setInEdit] = useState(dataItem[editField]);
   const [isNewItem, setIsNewItem] = useState(getIsNewItem(dataItem, dataItemKey));
-  useLogMountBehaviour();
+  useLogMountCounter();
 
   useEffect(() => {
     const newInEdit = dataItem[editField];
