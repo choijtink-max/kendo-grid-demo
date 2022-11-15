@@ -1,4 +1,4 @@
-import checkedField from './constants';
+import { checkedField } from './constants';
 import DateCell from './cells/DateCell';
 import DropDownCell from './cells/DropDownCell';
 import TextCell from './cells/TextCell';

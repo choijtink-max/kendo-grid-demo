@@ -1,19 +1,43 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
+import useLogMountBehaviour, { logCellMount, logCellUnmount } from '../logger';
 
 /**
  * This is the last grid column that has the remove button
  * and has the save button when a new item was added.
  */
+const getIsNewItem = (dataItem, dataItemKey) =>
+  dataItem[dataItemKey] === undefined;
 
 const ActionCommandCell = (props) => {
   // const { add, cancel, discard, edit, update } = props;
+  const { ariaColumnIndex, columnIndex } = props;
   const { add, dataItem, dataItemKey, discard, editField, render } = props;
-  const inEdit = dataItem[editField];
-  const isNewItem = dataItem[dataItemKey] === undefined;
+  const [inEdit, setInEdit] = useState(dataItem[editField]);
+  const [isNewItem, setIsNewItem] = useState(
+    getIsNewItem(dataItem, dataItemKey)
+  );
 
-  const renderInEdit = () => (
-    <td className="k-command-cell">
-      {isNewItem && (
+  useEffect(() => {
+    const newInEdit = dataItem[editField];
+    const newIsNewItem = getIsNewItem(dataItem, dataItemKey);
+  }, [dataItem]);
+
+  useEffect(() => {
+    logCellMount();
+    // console.log(`[ActionCommandCell] mounted`);
+    return () => {
+      logCellUnmount();
+      // console.log(`[ActionCommandCell] unmounted`);
+    };
+  }, []);
+
+  const defaultRendering = (
+    <td
+      aria-colindex={ariaColumnIndex}
+      data-grid-col-index={columnIndex}
+      className="k-command-cell"
+    >
+      {inEdit && isNewItem && (
         <>
           <button
             className="k-button k-button-md k-rounded-md k-button-solid k-button-solid-base k-grid-cancel-command"
@@ -31,28 +55,6 @@ const ActionCommandCell = (props) => {
       )}
     </td>
   );
-
-  const renderDefault = () => (
-    <td className="k-command-cell">
-      {/* <button
-        className="k-button k-button-md k-rounded-md k-button-solid k-button-solid-primary k-grid-edit-command"
-        onClick={() => edit(dataItem)}
-      >
-        Edit
-      </button> */}
-      {/* <button
-        className="k-button k-button-md k-rounded-md k-button-solid k-button-solid-base k-grid-remove-command"
-        onClick={() =>
-          confirm('Confirm deleting: ' + dataItem.ProductName) &&
-          remove(dataItem)
-        }
-      >
-        Remove
-      </button> */}
-    </td>
-  );
-
-  const defaultRendering = inEdit ? renderInEdit() : renderDefault();
   return render?.call(undefined, defaultRendering, props);
 };
 

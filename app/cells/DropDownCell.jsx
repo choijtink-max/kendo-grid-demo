@@ -1,6 +1,7 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { DropDownList } from '@progress/kendo-react-dropdowns';
-import { editField } from '../constants';
+import { dataItemKey, editField } from '../constants';
+import useLogMountBehaviour, { logCellMount, logCellUnmount } from '../logger';
 
 const localizedData = [
   { text: 'yes', value: true },
@@ -9,14 +10,23 @@ const localizedData = [
 ];
 
 const DropDownCell = (props) => {
+  const { ariaColumnIndex, columnIndex } = props;
   const { dataItem, field, onChange, render } = props;
+  const [key] = useState(`${dataItem[dataItemKey]}.${field}`);
+
+  useEffect(() => {
+    logCellMount();
+    return () => {
+      logCellUnmount();
+    };
+  }, []);
 
   const handleChange = (e) => {
     if (onChange) {
       onChange({
         dataIndex: 0,
-        dataItem: dataItem,
-        field: field,
+        dataItem,
+        field,
         syntheticEvent: e.syntheticEvent,
         value: e.target.value.value,
       });
@@ -41,7 +51,11 @@ const DropDownCell = (props) => {
   // I think we need to add functionality to the grid cells like onClick not in the GridCellWeb
   // but instead add them in the CellRenderer.
   const defaultRendering = (
-    <td>
+    <td
+      aria-colindex={ariaColumnIndex}
+      data-grid-col-index={columnIndex}
+      key={key}
+    >
       {dataItem[editField] === field ? renderInEdit() : dataValue.toString()}
     </td>
   );
