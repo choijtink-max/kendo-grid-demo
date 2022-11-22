@@ -7,10 +7,7 @@ import {
 import cloneDeep from 'lodash/cloneDeep';
 import get from 'lodash/get';
 import isNil from 'lodash/isNil';
-
-import ActionCommandCell from './cells/ActionCommandCell';
 import CheckboxCell from './cells/CheckboxCell';
-import CheckboxCell2 from './cells/CheckboxCell2';
 import CheckboxHeaderCell from './header-cells/CheckboxHeaderCell';
 import { checkedField, dataItemKey, editField, styling } from './constants';
 import { columns, getFirstEditableColumn } from './columns';
@@ -258,64 +255,6 @@ const SimpleGrid = () => {
     />
   );
 
-  const CheckboxCellInternal = (props) => {
-    const { ariaColumnIndex, dataItem, columnIndex, render } = props;
-    const checkboxId = dataItem[dataItemKey] || '';
-    const [isChecked, setIsChecked] = useState(dataItem[checkedField]);
-    // useLogMountCounter();
-    useLogMountBehaviour('CheckboxCellInternal');
-
-    const handleChecked = useCallback(() => {
-      const newIsChecked = !isChecked;
-      dataItem[checkedField] = newIsChecked;
-      setIsChecked(newIsChecked);
-      // onRowChecked(dataItem, newIsChecked);
-    }, [dataItem, isChecked]);
-
-    const defaultRendering = (
-      <td
-        aria-colindex={ariaColumnIndex}
-        data-grid-col-index={columnIndex}
-        key={checkboxId}
-      >
-        <input
-          style={styling.checkbox}
-          type="checkbox"
-          className="k-checkbox"
-          key={`${checkboxId}-row-checkbox`}
-          onChange={() => handleChecked()}
-          id={checkboxId}
-          defaultChecked={isChecked}
-        />
-        <label className="k-checkbox-label" htmlFor={checkboxId} />
-      </td>
-    );
-
-    // We call the render function in here instead of return the
-    // defaultRendering, so the CellRenderer is still getting called.
-    return render?.call(undefined, defaultRendering, props);
-  };
-
-  const customCheckboxCell = (props) => (
-    <CheckboxCell
-      {...props}
-      dataItemKey={dataItemKey}
-      onRowChecked={onRowChecked}
-    />
-  );
-
-  const customActionCommandCell = (props) => (
-    <ActionCommandCell
-      {...props}
-      add={add}
-      dataItemKey={dataItemKey}
-      discard={discard}
-      edit={enterEdit}
-      editField={editField}
-      remove={remove}
-    />
-  );
-
   const customCellRender = (td, props) => (
     <CellRender
       cancel={cancel}
@@ -374,7 +313,7 @@ const SimpleGrid = () => {
         orderIndex={0}
         resizable={false}
         headerCell={customCheckboxHeaderCell}
-        cell={CheckboxCell2}
+        cell={CheckboxCell}
       />
       {columns
         .filter((column) => !get(column, 'hidden', false))

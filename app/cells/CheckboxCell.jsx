@@ -1,44 +1,58 @@
-import React, { useState, useCallback } from 'react';
-import get from 'lodash/get';
-import { styling } from '../constants';
+import { dataItemKey, styling } from '../constants';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useLogMountBehaviour, useLogMountCounter } from '../logger';
 
-function isItemChecked(dataItem, checkedField) {
-  return Boolean(get(dataItem, checkedField, false) == true);
-}
-
 const CheckboxCell = (props) => {
-  const { ariaColumnIndex, dataItem, columnIndex, render } = props;
-  const { checkedField, dataItemKey, onRowChecked } = props;
-  const _id = dataItem[dataItemKey] || '';
-  const value = dataItem[checkedField];
-  const [isChecked, setIsChecked] = useState(value);
+  const { ariaColumnIndex, columnIndex, onChange } = props;
+  const { dataItem, field, render } = props;
+  const checkboxId = dataItem[dataItemKey] || '';
+  const [isChecked, setIsChecked] = useState(dataItem[field]);
   useLogMountCounter();
-  useLogMountBehaviour('CheckboxCell');
+  useLogMountBehaviour('CheckboxCell2');
 
-  const handleChecked = useCallback(() => {
-    const newIsChecked = !isChecked;
-    dataItem[checkedField] = newIsChecked;
-    setIsChecked(newIsChecked);
-    onRowChecked(dataItem, newIsChecked);
-  }, [checkedField, dataItem, isChecked]);
+  useEffect(() => {
+    const newIsChecked = dataItem[field];
+    if (newIsChecked !== isChecked) {
+      setIsChecked(newIsChecked);
+    }
+  }, [dataItem]);
+
+  const handleChecked = useCallback(
+    (e) => {
+      const newIsChecked = !dataItem[field];
+      dataItem[field] = newIsChecked;
+      setIsChecked(newIsChecked);
+      // onRowChecked(dataItem, newIsChecked);
+      dataItem.fn();
+
+      if (onChange) {
+        onChange({
+          dataIndex: 0,
+          dataItem,
+          field,
+          value: newIsChecked,
+        });
+      }
+    },
+    [dataItem, isChecked]
+  );
 
   const defaultRendering = (
     <td
       aria-colindex={ariaColumnIndex}
       data-grid-col-index={columnIndex}
-      key={_id}
+      key={checkboxId}
     >
       <input
         style={styling.checkbox}
         type="checkbox"
         className="k-checkbox"
-        key={`${_id}-row-checkbox`}
+        key={`${checkboxId}-row-checkbox`}
         onChange={() => handleChecked()}
-        id={_id}
+        id={checkboxId}
         defaultChecked={isChecked}
       />
-      <label className="k-checkbox-label" htmlFor={_id} />
+      <label className="k-checkbox-label" htmlFor={checkboxId} />
     </td>
   );
 
