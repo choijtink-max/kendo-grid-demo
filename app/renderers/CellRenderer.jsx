@@ -13,10 +13,12 @@ const ESC_KEY = 27;
 const CellRender = (props) => {
   const { cancel, enterEdit, focusNextCell, originalProps } = props;
   const { checkedField, dataItemKey, editField } = props;
-  const { dataItem, field } = originalProps;
+  const { ariaColumnIndex, columnIndex, dataItem, field } = originalProps;
   const isEditField = dataItem[editField] === field;
 
   const additionalProps = {
+    'aria-colindex': ariaColumnIndex,
+    'data-grid-col-index': columnIndex,
     checkedField,
     dataItemKey,
     editField,
