@@ -1,6 +1,17 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { useLogMountBehaviour, useLogMountCounter } from '../logger';
 
 const Content = (props) => {
+  const { ariaColumnIndex, columnIndex } = props;
+  const { handleClick, value } = props;
+  return (
+    <td>
+      <button onClick={handleClick}>{value}</button>
+    </td>
+  );
+};
+
+const Content2 = (props) => {
   const { ariaColumnIndex, columnIndex } = props;
   const { handleClick, value } = props;
   return (
@@ -21,7 +32,7 @@ const Wrapper = (props) => {
   }, []);
 
   useEffect(() => {
-    setValue(`${dataItem[field]}.${randomNumber}`);
+    setValue(`${dataItem[field]} | ${randomNumber}`);
   }, [dataItem[field], randomNumber]);
 
   const changeRandomNumber = useCallback(() => {

@@ -164,3 +164,7 @@ export function getItemsHavingCheckedSetTo(
 export function getCheckedItems(data, checkedKey = checkedField) {
   return data.filter((item) => item[checkedKey] === true);
 }
+
+export function getCellValueFromDataItem(dataItem, field) {
+  return dataItem[field];
+}
